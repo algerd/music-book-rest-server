@@ -40,6 +40,12 @@ public class Artist implements Serializable {
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Album> albums = new ArrayList<>();
     
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ArtistReference> artistReferences = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ArtistGenre> artistGenres = new ArrayList<>();
+    
     public Artist() {}
 
     public Long getId() {
@@ -76,6 +82,14 @@ public class Artist implements Serializable {
 
     public List<Album> getAlbums() {
         return albums;
+    }
+
+    public List<ArtistReference> getArtistReferences() {
+        return artistReferences;
+    }
+
+    public List<ArtistGenre> getArtistGenres() {
+        return artistGenres;
     }
 
     @Override

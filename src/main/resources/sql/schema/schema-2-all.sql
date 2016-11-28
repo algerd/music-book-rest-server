@@ -98,6 +98,8 @@ CREATE TABLE `musicbook`.`artist_genre` (
   `id_genre`    INT             NOT NULL DEFAULT 1,  
   `id_artist`   INT             NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
+  /*PRIMARY KEY (`id_genre`, `id_artist`),*/ 
+  UNIQUE KEY `uk_artist_genre`(`id_genre`, `id_artist`), 
   INDEX `fk_artist_genre_id_genre_idx` (`id_genre` ASC),
   CONSTRAINT `fk_artist_genre_id_genre`
     FOREIGN KEY (`id_genre`)
