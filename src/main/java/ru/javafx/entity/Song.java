@@ -2,7 +2,10 @@
 package ru.javafx.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -11,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -48,6 +52,12 @@ public class Song implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_album", foreignKey = @ForeignKey(name = "fk_song_id_album"))
     private Album album;
+    
+    @OneToMany(mappedBy = "song", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SongGenre> songGenres = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "song", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MusicianSong> musicianSongs = new ArrayList<>();
     
     public Song() {}
 
@@ -113,6 +123,14 @@ public class Song implements Serializable {
 
     public void setAlbum(Album album) {
         this.album = album;
+    }
+
+    public List<SongGenre> getSongGenres() {
+        return songGenres;
+    }
+
+    public List<MusicianSong> getMusicianSongs() {
+        return musicianSongs;
     }
 
     @Override

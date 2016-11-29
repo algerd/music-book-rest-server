@@ -98,7 +98,6 @@ CREATE TABLE `musicbook`.`artist_genre` (
   `id_genre`    INT             NOT NULL DEFAULT 1,  
   `id_artist`   INT             NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
-  /*PRIMARY KEY (`id_genre`, `id_artist`),*/ 
   UNIQUE KEY `uk_artist_genre`(`id_genre`, `id_artist`), 
   INDEX `fk_artist_genre_id_genre_idx` (`id_genre` ASC),
   CONSTRAINT `fk_artist_genre_id_genre`
@@ -117,6 +116,7 @@ CREATE TABLE `musicbook`.`album_genre` (
   `id_genre`    INT             NOT NULL DEFAULT 1,  
   `id_album`    INT             NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_album_genre`(`id_genre`, `id_album`),
   INDEX `fk_album_genre_id_genre_idx` (`id_genre` ASC),
   CONSTRAINT `fk_album_genre_id_genre`
     FOREIGN KEY (`id_genre`)
@@ -134,6 +134,7 @@ CREATE TABLE `musicbook`.`song_genre` (
   `id_genre`    INT             NOT NULL DEFAULT 1,  
   `id_song`     INT             NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_song_genre`(`id_genre`, `id_song`),
   INDEX `fk_song_genre_id_genre_idx` (`id_genre` ASC),
   CONSTRAINT `fk_song_genre_id_genre`
     FOREIGN KEY (`id_genre`)
@@ -151,6 +152,7 @@ CREATE TABLE `musicbook`.`musician_genre` (
   `id_genre`    INT             NOT NULL DEFAULT 1,  
   `id_musician` INT             NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_musician_genre`(`id_genre`, `id_musician`),
   INDEX `fk_musician_genre_id_genre_idx` (`id_genre` ASC),
   CONSTRAINT `fk_musician_genre_id_genre`
     FOREIGN KEY (`id_genre`)
@@ -170,6 +172,7 @@ CREATE TABLE `musicbook`.`musician_group` (
   `start_date`  VARCHAR(45)     DEFAULT ""      COMMENT 'Дата прихода музыканта в группу',
   `end_date`    VARCHAR(45)     DEFAULT ""      COMMENT 'Дата ухода музыканта из группы',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_musician_group`(`id_artist`, `id_musician`),
   INDEX `fk_musician_group_id_musician_idx` (`id_musician` ASC),
   CONSTRAINT `fk_musician_group_id_musician`
     FOREIGN KEY (`id_musician`)
@@ -187,6 +190,7 @@ CREATE TABLE `musicbook`.`musician_album` (
   `id_musician` INT             NOT NULL,  
   `id_album`    INT             NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_musician_album`(`id_musician`, `id_album`),
   INDEX `fk_musician_album_id_musician_idx` (`id_musician` ASC),
   CONSTRAINT `fk_musician_album_id_musician`
     FOREIGN KEY (`id_musician`)
@@ -204,6 +208,7 @@ CREATE TABLE `musicbook`.`musician_instrument` (
   `id_musician` INT             NOT NULL,  
   `id_instrument` INT           NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_musician_instrument`(`id_musician`, `id_instrument`),
   INDEX `fk_musician_instrument_id_musician_idx` (`id_musician` ASC),
   CONSTRAINT `fk_musician_instrument_id_musician`
     FOREIGN KEY (`id_musician`)
@@ -221,6 +226,7 @@ CREATE TABLE `musicbook`.`musician_song` (
   `id_musician` INT             NOT NULL,  
   `id_song`     INT             NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_musician_song`(`id_musician`, `id_song`),
   INDEX `fk_musician_song_id_musician_idx` (`id_musician` ASC),
   CONSTRAINT `fk_musician_song_id_musician`
     FOREIGN KEY (`id_musician`)

@@ -16,25 +16,25 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(
-    name="artist_genre",
-    uniqueConstraints = {@UniqueConstraint(name = "uk_artist_genre", columnNames = {"id_genre", "id_artist"})}
+    name="song_genre",
+    uniqueConstraints = {@UniqueConstraint(name = "uk_song_genre", columnNames = {"id_genre", "id_song"})}
 )
-public class ArtistGenre implements Serializable {
-
+public class SongGenre implements Serializable {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
     
     @ManyToOne
-    @JoinColumn(name = "id_artist", foreignKey = @ForeignKey(name = "fk_artist_genre_id_artist"))
-    private Artist artist;
+    @JoinColumn(name = "id_song", foreignKey = @ForeignKey(name = "fk_song_genre_id_song"))
+    private Song song;
    
     @ManyToOne
-    @JoinColumn(name = "id_genre", foreignKey = @ForeignKey(name = "fk_artist_genre_id_genre"))
+    @JoinColumn(name = "id_genre", foreignKey = @ForeignKey(name = "fk_song_genre_id_genre"))
     private Genre genre;
     
-    public ArtistGenre() {}
+    public SongGenre() {}
 
     public Long getId() {
         return id;
@@ -43,13 +43,13 @@ public class ArtistGenre implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    
-    public Artist getArtist() {
-        return artist;
+
+    public Song getSong() {
+        return song;
     }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
+    public void setSong(Song song) {
+        this.song = song;
     }
 
     public Genre getGenre() {
@@ -63,9 +63,9 @@ public class ArtistGenre implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 61 * hash + Objects.hashCode(this.id);
-        hash = 61 * hash + Objects.hashCode(this.artist);
-        hash = 61 * hash + Objects.hashCode(this.genre);
+        hash = 83 * hash + Objects.hashCode(this.id);
+        hash = 83 * hash + Objects.hashCode(this.song);
+        hash = 83 * hash + Objects.hashCode(this.genre);
         return hash;
     }
 
@@ -80,11 +80,11 @@ public class ArtistGenre implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ArtistGenre other = (ArtistGenre) obj;
+        final SongGenre other = (SongGenre) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.artist, other.artist)) {
+        if (!Objects.equals(this.song, other.song)) {
             return false;
         }
         if (!Objects.equals(this.genre, other.genre)) {
@@ -92,5 +92,5 @@ public class ArtistGenre implements Serializable {
         }
         return true;
     }
-       
+
 }

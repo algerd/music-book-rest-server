@@ -37,6 +37,15 @@ public class Genre implements Serializable {
     @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ArtistGenre> artistGenres = new ArrayList<>();
     
+    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AlbumGenre> albumGenres = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SongGenre> songGenres = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MusicianGenre> musicianGenres = new ArrayList<>();
+    
     public Genre() {}
 
     public Long getId() {
@@ -65,6 +74,18 @@ public class Genre implements Serializable {
 
     public List<ArtistGenre> getArtistGenres() {
         return artistGenres;
+    }
+
+    public List<AlbumGenre> getAlbumGenres() {
+        return albumGenres;
+    }
+
+    public List<SongGenre> getSongGenres() {
+        return songGenres;
+    }
+
+    public List<MusicianGenre> getMusicianGenres() {
+        return musicianGenres;
     }
 
     @Override
