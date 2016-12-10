@@ -28,9 +28,10 @@ public interface ArtistRepository extends PagingAndSortingRepository<Artist, Lon
     );
     */
     @RestResource(path = "artists", rel = "artists")
-    @Query("select a from Artist a where a.rating = :minrating")
+    @Query("select a from Artist a where a.rating >= :minrating and a.rating <= :maxrating")
     List<Artist> searchArtists(
-        @Param("minrating") Integer minrating
+        @Param("minrating") Integer minrating,
+        @Param("maxrating") Integer maxrating    
     );
     
     //List<Artist> searchArtists(Integer minRating, Integer maxRating);
