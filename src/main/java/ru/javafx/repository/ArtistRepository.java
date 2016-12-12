@@ -16,10 +16,21 @@ import ru.javafx.entity.Artist;
 public interface ArtistRepository extends PagingAndSortingRepository<Artist, Long> {
 
     Artist findByName(String name);
-   
+    
     @RestResource(path = "by_rating", rel = "by_rating")
     @Query("select a from Artist a where a.rating >= :minrating and a.rating <= :maxrating")
     Page<Artist> searchByRating(
+        @Param("minrating") Integer minrating,
+        @Param("maxrating") Integer maxrating,
+        @Param("pageable") Pageable pageable
+    );
+    
+    @RestResource(path = "by_name_and_rating", rel = "by_name_and_rating")
+    @Query("select a from Artist a where "
+            + "lower(a.name) like lower(concat(:search, '%')) "
+            + "and a.rating >= :minrating and a.rating <= :maxrating")
+    Page<Artist> searchByNameAndRating(
+        @Param("search") String search,    
         @Param("minrating") Integer minrating,
         @Param("maxrating") Integer maxrating,
         @Param("pageable") Pageable pageable
