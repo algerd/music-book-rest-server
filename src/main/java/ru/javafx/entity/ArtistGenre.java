@@ -25,7 +25,7 @@ public class ArtistGenre implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
-    
+       
     @ManyToOne
     @JoinColumn(name = "id_artist", foreignKey = @ForeignKey(name = "fk_artist_genre_id_artist"))
     private Artist artist;
