@@ -15,6 +15,8 @@ import ru.javafx.entity.Genre;
 @RepositoryRestResource(collectionResourceRel = "genres", path = "genres")
 public interface GenreRepository extends PagingAndSortingRepository<Genre, Long> {
     
+    Genre findByName(String name);
+    
     @RestResource(path = "by_name", rel = "by_name")
     @Query("select a from Genre a where lower(a.name) like lower(concat(:search, '%')) ")
     Page<Genre> searchByName(

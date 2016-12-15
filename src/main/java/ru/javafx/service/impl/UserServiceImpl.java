@@ -1,4 +1,4 @@
-package ru.javafx.service;
+package ru.javafx.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +10,7 @@ import ru.javafx.entity.Authority;
 import ru.javafx.entity.User;
 import ru.javafx.repository.AuthorityRepository;
 import ru.javafx.repository.UserRepository;
+import ru.javafx.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,9 +19,6 @@ public class UserServiceImpl implements UserService {
        
     @Autowired
     private UserRepository userRepository;
-       
-    @Autowired
-    private AuthorityRepository authorityRepository;
     
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -41,12 +39,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
-    
-    @Override
-    public Authority getAuthority(String authority) {
-        return authorityRepository.findByAuthority(authority);
-    }
-    
+   
     @Override
     public boolean isUserExist(User user) {
         return userRepository.findByUsername(user.getUsername()) != null;

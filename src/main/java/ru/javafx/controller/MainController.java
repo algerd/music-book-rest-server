@@ -17,14 +17,18 @@ import org.springframework.web.util.UriComponentsBuilder;
 import ru.javafx.entity.User;
 import ru.javafx.service.UserService;
 import org.springframework.validation.annotation.Validated;
+import ru.javafx.service.AuthorityService;
 
 @RestController
 public class MainController {
     
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private AuthorityService authorityService;
     
     @RequestMapping(value = "/user/create", method = RequestMethod.POST)
     public ResponseEntity<Void> createUser(@Validated @RequestBody User user, UriComponentsBuilder ucBuilder){
@@ -43,7 +47,7 @@ public class MainController {
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
         user.setEnabled(true);
-        user.getAuthorities().add(userService.getAuthority("USER"));       
+        user.getAuthorities().add(authorityService.findAuthority("USER"));       
         userService.save(user);       
         logger.info("Creating User: " + user);  
         
