@@ -1,8 +1,7 @@
 
 package ru.javafx.repository;
 
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import java.util.List;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -12,12 +11,14 @@ import ru.javafx.entity.ArtistGenre;
 @Transactional
 @RepositoryRestResource(collectionResourceRel = "artist_genres", path = "artist_genres")
 public interface ArtistGenreRepository extends PagingAndSortingRepository<ArtistGenre, Long> {
-    /* 
-    @Modifying
-    @Query(value = "INSERT INTO artist_genre (id_artist, id_genre) VALUES (:id_artist, :id_genre)", nativeQuery = true)
-    void insert(
-        @Param("id_artist") String id_artist, 
-        @Param("id_genre") String id_genre 
-    );
+    /*
+    ArtistGenre findByIdArtistAndIdGenre(
+        @Param("id_artist") Long id_artist, 
+        @Param("id_genre") Long id_genre);
+    */
+    /*
+    List<ArtistGenre> findByIdArtist(@Param("id_artist") Long id_artist);
+    
+    List<ArtistGenre> findByIdGenre(@Param("id_genre") Long id_genre);
     */
 }

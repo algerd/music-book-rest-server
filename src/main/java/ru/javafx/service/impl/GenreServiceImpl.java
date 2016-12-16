@@ -21,5 +21,10 @@ public class GenreServiceImpl implements GenreService {
     public Genre findGenre(String name) {
         return genreRepository.findByName(name);
     }
+    
+    @Override
+    public Genre findGenre(Long id) {
+        return genreRepository.findOne(id);
+    }
 
 }
