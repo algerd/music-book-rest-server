@@ -35,5 +35,9 @@ public interface ArtistRepository extends PagingAndSortingRepository<Artist, Lon
         @Param("maxrating") Integer maxrating,
         @Param("pageable") Pageable pageable
     );
+    
+    @RestResource(path = "by_name", rel = "by_name")
+    @Query("select a from Artist a where trim(lower(a.name)) = trim(lower(:search))")
+    Artist existByName(@Param("search") String search);
         
 }

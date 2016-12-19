@@ -67,8 +67,8 @@ public class ArtistController {
             @PathVariable("id_artist") Long idArtist,
             @PathVariable("id_genre") Long idGenre) {
         
-        //ArtistGenre artistGenre = artistGenreService.findByIdArtistAndIdGenre(idArtist, idGenre);
-        //artistGenreService.delete(artistGenre);
+        ArtistGenre artistGenre = artistGenreService.findByIdArtistAndIdGenre(idArtist, idGenre);
+        artistGenreService.delete(artistGenre);
         
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

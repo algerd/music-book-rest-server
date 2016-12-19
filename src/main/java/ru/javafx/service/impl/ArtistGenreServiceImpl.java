@@ -24,9 +24,9 @@ public class ArtistGenreServiceImpl implements ArtistGenreService {
      public void delete(ArtistGenre artistGenre) {
         artistGenreRepository.delete(artistGenre);
     }
-    /*
+    
     public ArtistGenre findByIdArtistAndIdGenre(Long idArtist, Long idGenre) {
         return artistGenreRepository.findByIdArtistAndIdGenre(idArtist, idGenre);
     }
-    */
+   
 }
