@@ -10,7 +10,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javafx.entity.Artist;
-import ru.javafx.entity.Genre;
 
 @Transactional
 @RepositoryRestResource(collectionResourceRel = "artists", path = "artists")
@@ -36,34 +35,20 @@ public interface ArtistRepository extends PagingAndSortingRepository<Artist, Lon
         @Param("maxrating") Integer maxrating,
         @Param("pageable") Pageable pageable
     );
-    /*
-    @RestResource(path = "by_name_and_rating_and_genre", rel = "by_name_and_rating_and_genre")            
-    @Query(value = "select "
-            + "artist.id, "
-            + "artist.name, "
-            + "artist.rating, "
-            + "artist.description "
-                + "from artist_genre "
-                + "left join artist on artist_genre.id_artist = artist.id "
-                    + "where "
-                        + "lower(a.name) like lower(concat(:search, '%')) "
-                        + "and a.rating >= :minrating and a.rating <= :maxrating "
-                        + "artist_genre.id_genre = :id_genre",
-            nativeQuery = true)
-    Page<Artist> searchByNameAndRatingAndGenre(
+    
+    @RestResource(path = "by_genre_and_rating_and_name", rel = "by_genre_and_rating_and_name")
+    @Query("select a from Artist a "
+            + "right join a.artistGenres as joinartists "
+            + "where lower(a.name) like lower(concat(:search, '%')) "
+            + "and a.rating >= :minrating and a.rating <= :maxrating "
+            + "and joinartists.genre.id = :id_genre")
+    Page<Artist> searchByGenreAndRatingAndName(
         @Param("search") String search,    
         @Param("minrating") Integer minrating,
-        @Param("maxrating") Integer maxrating,
-        @Param("id_genre") Integer id_genre,
-        @Param("pageable") Pageable pageable
-    );
-    */
-    /*
-    @RestResource(path = "by_genre", rel = "by_genre")
-    Page<Artist> findByArtistGenres_Genre_Name(
-        @Param("name") String name, 
-        @Param("pageable") Pageable pageable);  
-    */    
+        @Param("maxrating") Integer maxrating,    
+        @Param("id_genre") Long id_genre, 
+        @Param("pageable") Pageable pageable);
+        
     @RestResource(path = "by_name", rel = "by_name")
     @Query("select a from Artist a where trim(lower(a.name)) = trim(lower(:search))")
     Artist existByName(@Param("search") String search);

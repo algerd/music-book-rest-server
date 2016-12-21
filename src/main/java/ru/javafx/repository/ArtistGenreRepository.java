@@ -31,10 +31,17 @@ public interface ArtistGenreRepository extends PagingAndSortingRepository<Artist
         @Param("pageable") Pageable pageable); 
     
     /*
-    @Query("select ag from ArtistGenre ag where "
-            + "lower(ag.Artists.name) like lower(concat(:search, '%')) "
-            + "and ag.Artists.rating >= :minrating and ag.Artists.rating <= :maxrating"
-            + "and ag.Genres.id = :id"
-    )
+    @RestResource(path = "search_by_artist", rel = "search_by_artist")
+    @Query("select a from ArtistGenre a where "
+            + "lower(a.artist.name) like lower(concat(:search, '%')) "
+            + "and a.artist.rating >= :minrating and a.artist.rating <= :maxrating "
+            + "and a.genre.id = :id")
+    Page<ArtistGenre> findByGenreAndRatingAndName(
+        @Param("search") String search,    
+        @Param("minrating") Integer minrating,
+        @Param("maxrating") Integer maxrating,    
+        @Param("id") Long id, 
+        @Param("pageable") Pageable pageable);
     */
+
 }
