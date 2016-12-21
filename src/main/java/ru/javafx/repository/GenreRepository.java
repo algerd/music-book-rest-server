@@ -1,6 +1,7 @@
 
 package ru.javafx.repository;
 
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -23,5 +24,11 @@ public interface GenreRepository extends PagingAndSortingRepository<Genre, Long>
         @Param("search") String search,    
         @Param("pageable") Pageable pageable
     );
+    
+    @RestResource(path = "by_artist", rel = "by_artist")
+    @Query("select genre from Genre genre "
+            + "right join genre.artistGenres as joingenres "
+            + "where joingenres.artist.id = :id_artist")
+    List<Genre> findByArtist(@Param("id_artist") Long id_artist);
     
 }
