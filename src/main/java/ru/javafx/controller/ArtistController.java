@@ -30,23 +30,9 @@ public class ArtistController {
     
     @Autowired
     private ArtistGenreService artistGenreService;
-    /*
-    @RequestMapping(value = "api/artists/{id}/genres", method = RequestMethod.POST)
-    public ResponseEntity<Void> saveGenre(@PathVariable Long id, @RequestBody Genre requestGenre) {
-        
-        Artist artist = artistService.findArtist(id);
-        Genre genre = genreService.findGenre(requestGenre.getName());
-        //TODO: сделать проверки существования связки artist+genre в таблице artist_genre
-        ArtistGenre artistGenre = new ArtistGenre();
-        artistGenre.setArtist(artist);
-        artistGenre.setGenre(genre);
-        artistGenreService.save(artistGenre);
-        
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-    */
+
     @RequestMapping(value = "api/artists/{id_artist}/genres/{id_genre}", method = RequestMethod.POST)
-    public ResponseEntity<Void> saveGenre(
+    public ResponseEntity<Void> addGenreToArtist(
             @PathVariable("id_artist") Long idArtist,
             @PathVariable("id_genre") Long idGenre) {
         
@@ -63,7 +49,7 @@ public class ArtistController {
     }
     
     @RequestMapping(value = "api/artists/{id_artist}/genres/{id_genre}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteGenre(
+    public ResponseEntity<Void> deleteGenreFromArtist(
             @PathVariable("id_artist") Long idArtist,
             @PathVariable("id_genre") Long idGenre) {
         

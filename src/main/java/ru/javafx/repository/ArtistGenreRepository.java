@@ -16,19 +16,4 @@ public interface ArtistGenreRepository extends PagingAndSortingRepository<Artist
     ArtistGenre findByIdArtistAndIdGenre(
         @Param("id_artist") Long id_artist, 
         @Param("id_genre") Long id_genre);
-        
-    /*
-    @RestResource(path = "search_by_artist", rel = "search_by_artist")
-    @Query("select a from ArtistGenre a where "
-            + "lower(a.artist.name) like lower(concat(:search, '%')) "
-            + "and a.artist.rating >= :minrating and a.artist.rating <= :maxrating "
-            + "and a.genre.id = :id")
-    Page<ArtistGenre> findByGenreAndRatingAndName(
-        @Param("search") String search,    
-        @Param("minrating") Integer minrating,
-        @Param("maxrating") Integer maxrating,    
-        @Param("id") Long id, 
-        @Param("pageable") Pageable pageable);
-    */
-
 }
