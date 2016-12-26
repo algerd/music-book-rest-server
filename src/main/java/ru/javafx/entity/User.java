@@ -57,6 +57,10 @@ public class User implements UserDetails, CredentialsContainer, Cloneable {
     
     @Column(name="enabled")
     private boolean enabled;
+    
+    @Size(max = 255)
+    @Column(name="image_link")
+    private String imageLink;
           
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -139,6 +143,14 @@ public class User implements UserDetails, CredentialsContainer, Cloneable {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
     @Override

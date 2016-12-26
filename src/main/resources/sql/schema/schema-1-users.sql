@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
     account_non_expired BOOLEAN NOT NULL,
     account_non_locked BOOLEAN NOT NULL,
     credentials_non_expired BOOLEAN NOT NULL,
+    image_link VARCHAR(255) DEFAULT "" COMMENT 'Ссылка изображения',
     enabled BOOLEAN NOT NULL,
     UNIQUE KEY uk_username(username)
 );

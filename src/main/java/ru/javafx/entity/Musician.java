@@ -46,6 +46,10 @@ public class Musician implements Serializable {
     @Column(name="description")
     private String description;
     
+    @Size(max = 255)
+    @Column(name="image_link")
+    private String imageLink;
+    
     @OneToMany(mappedBy = "musician", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MusicianGenre> musicianGenres = new ArrayList<>();
     
@@ -115,6 +119,14 @@ public class Musician implements Serializable {
         return description;
     }
 
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
+    }
+    
     public void setDescription(String description) {
         this.description = description;
     }
