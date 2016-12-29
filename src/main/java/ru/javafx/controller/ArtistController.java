@@ -4,7 +4,9 @@ package ru.javafx.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +57,32 @@ public class ArtistController {
         
         ArtistGenre artistGenre = artistGenreService.findByIdArtistAndIdGenre(idArtist, idGenre);
         artistGenreService.delete(artistGenre);
+        
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    
+    @RequestMapping(value = "api/artists/{id_artist}/image", method = RequestMethod.POST, produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    public ResponseEntity<Void> saveArtistImage(
+            @PathVariable("id_artist") Long idArtist, 
+            HttpEntity<byte[]> requestEntity) {
+        
+        byte[] payload = requestEntity.getBody();
+        System.out.println(payload);
+        //InputStream inputStream = servletContext.getResourceAsStream("/images/no_image.jpg");
+        //IOUtils.toByteArray(inputStream);
+        
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    
+    @RequestMapping(value = "api/artists/{id_artist}/image", method = RequestMethod.GET, consumes = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    public ResponseEntity<Void> getArtistImage(
+            @PathVariable("id_artist") Long idArtist, 
+            HttpEntity<byte[]> requestEntity) {
+        
+        byte[] payload = requestEntity.getBody();
+        System.out.println(payload);
+        //InputStream inputStream = servletContext.getResourceAsStream("/images/no_image.jpg");
+        //IOUtils.toByteArray(inputStream);
         
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
