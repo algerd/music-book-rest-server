@@ -1,6 +1,7 @@
 
 package ru.javafx.controller;
 
+import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import ru.javafx.entity.Genre;
 import ru.javafx.service.ArtistGenreService;
 import ru.javafx.service.ArtistService;
 import ru.javafx.service.GenreService;
+import ru.javafx.utils.ImageUtil;
 
 @RestController
 public class ArtistController {
@@ -66,24 +68,30 @@ public class ArtistController {
             @PathVariable("id_artist") Long idArtist, 
             HttpEntity<byte[]> requestEntity) {
         
-        byte[] payload = requestEntity.getBody();
-        System.out.println(payload);
-        //InputStream inputStream = servletContext.getResourceAsStream("/images/no_image.jpg");
-        //IOUtils.toByteArray(inputStream);
         
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        /*
+        String stringImageFormat = "";
+        if (imageFormat.equals(MediaType.IMAGE_JPEG_VALUE)) {
+            stringImageFormat = "jpg";
+        } else if (imageFormat.equals(MediaType.IMAGE_PNG_VALUE)) {
+            stringImageFormat = "png";
+        }
+        */     
+        String stringImageFormat = "jpg";
+               
+        if (!stringImageFormat.equals("")) {
+            File file = ImageUtil.createImageFile("artist", idArtist, stringImageFormat);
+            byte[] imageInByte = requestEntity.getBody();
+            if(ImageUtil.writeImage(imageInByte, stringImageFormat, file)) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        }      
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
     
     @RequestMapping(value = "api/artists/{id_artist}/image", method = RequestMethod.GET, consumes = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-    public ResponseEntity<Void> getArtistImage(
-            @PathVariable("id_artist") Long idArtist, 
-            HttpEntity<byte[]> requestEntity) {
-        
-        byte[] payload = requestEntity.getBody();
-        System.out.println(payload);
-        //InputStream inputStream = servletContext.getResourceAsStream("/images/no_image.jpg");
-        //IOUtils.toByteArray(inputStream);
-        
+    public ResponseEntity<byte[]> getArtistImage(@PathVariable("id_artist") Long idArtist) {
+     
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
