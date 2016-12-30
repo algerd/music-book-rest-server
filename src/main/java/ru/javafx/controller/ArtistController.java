@@ -94,7 +94,9 @@ public class ArtistController {
         if (!stringImageFormat.equals("")) {
             File file = ImageUtil.createImageFile(folder, id, stringImageFormat);
             byte[] imageInByte = requestEntity.getBody();
-            if(ImageUtil.writeImage(imageInByte, stringImageFormat, file)) {
+            if (ImageUtil.writeImage(imageInByte, stringImageFormat, file)) {
+                // Сделать сохранение в бд ссылки на картинку
+                
                 return new ResponseEntity<>(HttpStatus.OK);
             }
         } 
@@ -106,23 +108,13 @@ public class ArtistController {
             @PathVariable("folder") String folder,
             @PathVariable("id") Long id) {
         
+        // Если сделать сохранение ссылки картинки в бд, то при удалении надо просто удалять картинку по ссылке.
+        
         if (imageFolderList.contains(folder)) {
             ImageUtil.deleteImage(folder, id);
             return new ResponseEntity<>(HttpStatus.OK);                    
         }       
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);     
     }
-               
-    @RequestMapping(value = "api/{folder}/{id}/image", method = RequestMethod.GET, consumes = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-    public ResponseEntity<byte[]> getArtistImage(
-            @PathVariable("folder") String folder,
-            @PathVariable("id") Long id) {
-        
-        if (!imageFolderList.contains(folder)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }             
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
+    
 }

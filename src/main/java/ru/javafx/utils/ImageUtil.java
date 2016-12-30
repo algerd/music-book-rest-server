@@ -15,7 +15,7 @@ public class ImageUtil {
     public static final String DIR_IMAGE = "src/main/resources/static/images/";
     public static final int WIDTH_COVER = 300;
     public static final int HEIGTH_COVER = 300;
-    
+
     public static boolean writeImage(byte[] imageInByte, String imageFormat, File file) {      
         try {
             InputStream inputStream = new ByteArrayInputStream(imageInByte);
