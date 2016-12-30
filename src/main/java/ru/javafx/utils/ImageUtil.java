@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import javax.imageio.ImageIO;
 
 public class ImageUtil {
@@ -23,7 +24,7 @@ public class ImageUtil {
             // resize image. Надо вынести отсюда, чтобы регулировать размерами извне
             // сделать проверку(ограничение) передаваемого изображения, чтобы не преобразовывать гигантские картинки
             bImageFromConvert = resizeImage(bImageFromConvert, WIDTH_COVER, HEIGTH_COVER, true);
-            
+            file.mkdirs();
             ImageIO.write(bImageFromConvert, imageFormat, file);
             return true;
         } catch (IOException ex) {
@@ -32,10 +33,31 @@ public class ImageUtil {
         }       
     }
     
-    public static File createImageFile(String nameEntity, Long id, String imageFormat) {      
+    public static boolean deleteImage(File file) {
+        try {          
+            return Files.deleteIfExists(file.toPath());
+        } 
+        catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public static void deleteImage(String folder, Long id) {
+        File[] files = new File(DIR_IMAGE + folder +"/").listFiles();
+        for (File file : files) {
+            if (file.isFile()) {
+                if (id.toString().equals(file.getName().split("\\.")[0])) {
+                    deleteImage(file);
+                }               
+            }
+        }
+    }
+   
+    public static File createImageFile(String folder, Long id, String imageFormat) {      
         //String nameEntity = entity.getClass().getSimpleName().toLowerCase();
-        String dirImage = DIR_IMAGE + nameEntity +"/"; 
-        File file = new File(dirImage + id + "." + imageFormat); 
+        String dirImage = DIR_IMAGE + folder +"/"; 
+        File file = new File(dirImage + id + "." + imageFormat);    
         return file; 
     }
     
