@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 import javax.imageio.ImageIO;
 
 public class ImageUtil {
@@ -44,6 +46,7 @@ public class ImageUtil {
     }
     
     public static void deleteImage(String folder, Long id) {
+        /*
         File[] files = new File(DIR_IMAGE + folder +"/").listFiles();
         for (File file : files) {
             if (file.isFile()) {
@@ -52,6 +55,23 @@ public class ImageUtil {
                 }               
             }
         }
+        */
+        for (File imageFile : getImageFiles(folder, id)) {
+            deleteImage(imageFile);
+        }
+    }
+  
+    public static List<File> getImageFiles(String folder, Long id) {
+        File[] files = new File(DIR_IMAGE + folder +"/").listFiles();
+        List<File> imageFiles = new ArrayList<>();
+        for (File file : files) {
+            if (file.isFile()) {
+                if (id.toString().equals(file.getName().split("\\.")[0])) {
+                    imageFiles.add(file);
+                }               
+            }
+        }
+        return imageFiles;
     }
    
     public static File createImageFile(String folder, Long id, String imageFormat) {      
@@ -73,8 +93,8 @@ public class ImageUtil {
             } else {
                 scaledHeight = (int) (scaledWidth * imageHeight / imageWidth);
             }        
-        }                       
-        BufferedImage resizedImage = new BufferedImage(scaledWidth, scaledHeight, originalImage.getType());       
+        }       
+        BufferedImage resizedImage = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_RGB); 
         Graphics2D g2d = resizedImage.createGraphics();
         g2d.drawImage(originalImage, 0, 0, scaledWidth, scaledHeight, null);
         g2d.dispose();    

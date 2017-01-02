@@ -83,6 +83,8 @@ public class ArtistController {
         if (!imageFolderList.contains(folder)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        
+        logger.info("media type: {}", headers.getContentType());
             
         MediaType mediaType = headers.getContentType();        
         String stringImageFormat = "";
@@ -90,13 +92,15 @@ public class ArtistController {
             stringImageFormat = "jpg";
         } else if (mediaType.equals(MediaType.IMAGE_PNG)) {
             stringImageFormat = "png";
-        }  
+        } 
+        
+        logger.info("image format: {}", stringImageFormat);
+        
+        
         if (!stringImageFormat.equals("")) {
             File file = ImageUtil.createImageFile(folder, id, stringImageFormat);
             byte[] imageInByte = requestEntity.getBody();
-            if (ImageUtil.writeImage(imageInByte, stringImageFormat, file)) {
-                // Сделать сохранение в бд ссылки на картинку
-                
+            if (ImageUtil.writeImage(imageInByte, stringImageFormat, file)) {            
                 return new ResponseEntity<>(HttpStatus.OK);
             }
         } 
@@ -107,9 +111,7 @@ public class ArtistController {
     public ResponseEntity<Void> deleteArtistImage(
             @PathVariable("folder") String folder,
             @PathVariable("id") Long id) {
-        
-        // Если сделать сохранение ссылки картинки в бд, то при удалении надо просто удалять картинку по ссылке.
-        
+
         if (imageFolderList.contains(folder)) {
             ImageUtil.deleteImage(folder, id);
             return new ResponseEntity<>(HttpStatus.OK);                    
