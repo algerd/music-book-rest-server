@@ -45,35 +45,10 @@ public class ImageUtil {
         }
     }
     
-    public static void deleteImage(String folder, Long id) {
-        /*
-        File[] files = new File(DIR_IMAGE + folder +"/").listFiles();
-        for (File file : files) {
-            if (file.isFile()) {
-                if (id.toString().equals(file.getName().split("\\.")[0])) {
-                    deleteImage(file);
-                }               
-            }
-        }
-        */
-        for (File imageFile : getImageFiles(folder, id)) {
-            deleteImage(imageFile);
-        }
+    public static void deleteImage(String folder, Long id) { 
+        deleteImage(createImageFile(folder, id, "jpg"));
     }
-  
-    public static List<File> getImageFiles(String folder, Long id) {
-        File[] files = new File(DIR_IMAGE + folder +"/").listFiles();
-        List<File> imageFiles = new ArrayList<>();
-        for (File file : files) {
-            if (file.isFile()) {
-                if (id.toString().equals(file.getName().split("\\.")[0])) {
-                    imageFiles.add(file);
-                }               
-            }
-        }
-        return imageFiles;
-    }
-   
+    
     public static File createImageFile(String folder, Long id, String imageFormat) {      
         //String nameEntity = entity.getClass().getSimpleName().toLowerCase();
         String dirImage = DIR_IMAGE + folder +"/"; 

@@ -73,7 +73,7 @@ public class ArtistController {
             PathType.ARTISTS.toString(), 
             PathType.ALBUMS.toString());   
     
-    @RequestMapping(value = "api/{folder}/{id}/image", method = RequestMethod.POST, produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    @RequestMapping(value = "api/{folder}/{id}/image", method = RequestMethod.POST, produces = {MediaType.IMAGE_JPEG_VALUE})
     public ResponseEntity<Void> saveArtistImage(
             @PathVariable("id") Long id,
             @PathVariable("folder") String folder,
@@ -82,28 +82,12 @@ public class ArtistController {
         
         if (!imageFolderList.contains(folder)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }    
+        File file = ImageUtil.createImageFile(folder, id, "jpg");
+        byte[] imageInByte = requestEntity.getBody();
+        if (ImageUtil.writeImage(imageInByte, "jpg", file)) {            
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        
-        logger.info("media type: {}", headers.getContentType());
-            
-        MediaType mediaType = headers.getContentType();        
-        String stringImageFormat = "";
-        if (mediaType.equals(MediaType.IMAGE_JPEG)) {
-            stringImageFormat = "jpg";
-        } else if (mediaType.equals(MediaType.IMAGE_PNG)) {
-            stringImageFormat = "png";
-        } 
-        
-        logger.info("image format: {}", stringImageFormat);
-        
-        
-        if (!stringImageFormat.equals("")) {
-            File file = ImageUtil.createImageFile(folder, id, stringImageFormat);
-            byte[] imageInByte = requestEntity.getBody();
-            if (ImageUtil.writeImage(imageInByte, stringImageFormat, file)) {            
-                return new ResponseEntity<>(HttpStatus.OK);
-            }
-        } 
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
     
