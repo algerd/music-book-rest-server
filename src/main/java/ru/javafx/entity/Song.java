@@ -48,11 +48,7 @@ public class Song implements Serializable {
     @Size(max = 10000, message = "error.song.description.size")
     @Column(name="description")
     private String description;
-    
-    @Size(max = 255)
-    @Column(name="image_link")
-    private String imageLink;
-    
+
     @ManyToOne
     @JoinColumn(name = "id_album", foreignKey = @ForeignKey(name = "fk_song_id_album"))
     private Album album;
@@ -121,14 +117,6 @@ public class Song implements Serializable {
         this.description = description;
     }
 
-    public String getImageLink() {
-        return imageLink;
-    }
-
-    public void setImageLink(String imageLink) {
-        this.imageLink = imageLink;
-    }
-    
     public Album getAlbum() {
         return album;
     }

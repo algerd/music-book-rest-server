@@ -19,7 +19,6 @@ CREATE TABLE `musicbook`.`artist` (
   `name`        VARCHAR(255)    NOT NULL                COMMENT 'Название группы',
   `rating`      INT             DEFAULT 0               COMMENT 'Рейтинг группы',
   `description` BLOB(10000)                             COMMENT 'Описание группы',
-  `image_link`  VARCHAR(255)    DEFAULT ""              COMMENT 'Ссылка изображения',
   PRIMARY KEY (`id`))
 COMMENT = 'Таблица групп';
 
@@ -31,7 +30,6 @@ CREATE TABLE `musicbook`.`album` (
   `time`        VARCHAR(45)     DEFAULT ""              COMMENT 'Длительность альбома',
   `rating`      INT             DEFAULT 0               COMMENT 'Рейтинг альбома',
   `description` BLOB(10000)                             COMMENT 'Описание альбома',
-  `image_link`  VARCHAR(255)    DEFAULT ""              COMMENT 'Ссылка изображения',
   PRIMARY KEY (`id`),
   INDEX `fk_album_id_artist_idx` (`id_artist` ASC),
   CONSTRAINT `fk_album_id_artist`
@@ -49,7 +47,6 @@ CREATE TABLE `musicbook`.`song` (
   `time`        VARCHAR(45)     DEFAULT ""              COMMENT 'Длительность песни',
   `rating`      INT             DEFAULT 0               COMMENT 'Рейтинг песни',
   `description` BLOB(10000)                             COMMENT 'Описание песни',
-  `image_link`  VARCHAR(255)    DEFAULT ""              COMMENT 'Ссылка изображения',
   PRIMARY KEY (`id`),
   INDEX `fk_song_id_album_idx` (`id_album` ASC),
   CONSTRAINT `fk_song_id_album`
@@ -70,7 +67,6 @@ CREATE TABLE `musicbook`.`instrument` (
   `id`          INT             NOT NULL AUTO_INCREMENT COMMENT 'id инструмента',
   `name`        VARCHAR(255)    NOT NULL                COMMENT 'Название инструмента',
   `description` BLOB(10000)                             COMMENT 'Описание инструмента',
-  `image_link`  VARCHAR(255)    DEFAULT ""              COMMENT 'Ссылка изображения',
   PRIMARY KEY (`id`))
 COMMENT = 'Таблица инструментов';
 
@@ -82,7 +78,6 @@ CREATE TABLE `musicbook`.`musician` (
   `country`     VARCHAR(255)    DEFAULT ""              COMMENT 'Страна музыканта',
   `rating`      INT             DEFAULT 0               COMMENT 'Рейтинг музыканта',
   `description` BLOB(10000)                             COMMENT 'Описание музыканта',
-  `image_link`  VARCHAR(255)    DEFAULT ""              COMMENT 'Ссылка изображения',
   PRIMARY KEY (`id`))
 COMMENT = 'Таблица музыканта';
 
