@@ -8,8 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
 import javax.imageio.ImageIO;
 
 public class ImageUtil {
@@ -68,8 +66,9 @@ public class ImageUtil {
             } else {
                 scaledHeight = (int) (scaledWidth * imageHeight / imageWidth);
             }        
-        }       
-        BufferedImage resizedImage = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_RGB); 
+        }
+        int type = (originalImage.getType() != 0) ? originalImage.getType() : BufferedImage.TYPE_INT_RGB;
+        BufferedImage resizedImage = new BufferedImage(scaledWidth, scaledHeight, type); 
         Graphics2D g2d = resizedImage.createGraphics();
         g2d.drawImage(originalImage, 0, 0, scaledWidth, scaledHeight, null);
         g2d.dispose();    

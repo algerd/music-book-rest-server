@@ -2,7 +2,6 @@
 package ru.javafx.entity.resource;
 
 import java.io.File;
-import java.util.List;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.ResourceProcessor;
