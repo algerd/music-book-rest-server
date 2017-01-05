@@ -70,7 +70,11 @@ public class ArtistController {
     
     private final List<String> imageFolderList = Arrays.asList(
             PathType.ARTISTS.toString(), 
-            PathType.ALBUMS.toString());   
+            PathType.ALBUMS.toString(),
+            PathType.GENRES.toString(),
+            PathType.SONGS.toString(),
+            PathType.MUSICIANS.toString(),
+            PathType.INSTRUMENTS.toString());   
     
     @RequestMapping(value = "api/{folder}/{id}/image", method = RequestMethod.POST, produces = {MediaType.IMAGE_JPEG_VALUE})
     public ResponseEntity<Void> saveArtistImage(

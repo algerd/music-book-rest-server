@@ -4,7 +4,11 @@ package ru.javafx;
 public enum PathType {
     
     ARTISTS("artists"),
-    ALBUMS("albums");
+    ALBUMS("albums"),
+    GENRES("genres"),
+    SONGS("songs"),
+    MUSICIANS("musicians"),
+    INSTRUMENTS("instruments");
 
     private final String path;
 
