@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.transaction.annotation.Transactional;
-import ru.javafx.entity.Artist;
 import ru.javafx.entity.Genre;
 
 @Transactional
@@ -31,6 +30,12 @@ public interface GenreRepository extends PagingAndSortingRepository<Genre, Long>
             + "right join genre.artistGenres as joingenres "
             + "where joingenres.artist.id = :id_artist")
     List<Genre> findByArtist(@Param("id_artist") Long id_artist);
+    
+    @RestResource(path = "by_album", rel = "by_album")
+    @Query("select genre from Genre genre "
+            + "right join genre.albumGenres as joingenres "
+            + "where joingenres.album.id = :id_album")
+    List<Genre> findByAlbum(@Param("id_album") Long id_album);
     
     @RestResource(path = "exist_by_name", rel = "exist_by_name")
     @Query("select g from Genre g where trim(lower(g.name)) = trim(lower(:search))")
