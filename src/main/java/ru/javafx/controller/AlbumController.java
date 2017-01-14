@@ -10,52 +10,50 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.javafx.entity.Artist;
-import ru.javafx.entity.ArtistGenre;
+import ru.javafx.entity.Album;
+import ru.javafx.entity.AlbumGenre;
 import ru.javafx.entity.Genre;
-import ru.javafx.service.ArtistGenreService;
-import ru.javafx.service.ArtistService;
+import ru.javafx.service.AlbumGenreService;
+import ru.javafx.service.AlbumService;
 import ru.javafx.service.GenreService;
 
 @RestController
-@RequestMapping(value = "api/artists/")
-public class ArtistController {
+@RequestMapping(value = "api/albums/")
+public class AlbumController {
     
     private final Logger logger = LoggerFactory.getLogger(getClass());
     
     @Autowired
-    private ArtistService artistService;   
+    private AlbumService albumService;
     @Autowired
-    private GenreService genreService;   
+    private GenreService genreService;
     @Autowired
-    private ArtistGenreService artistGenreService;
-
-    @RequestMapping(value = "{id_artist}/genres/{id_genre}", method = RequestMethod.POST)
-    public ResponseEntity<Void> addGenreToArtist(
-            @PathVariable("id_artist") Long idArtist,
+    private AlbumGenreService albumGenreService;
+    
+    @RequestMapping(value = "{id_album}/genres/{id_genre}", method = RequestMethod.POST)
+    public ResponseEntity<Void> addGenreToAlbum(
+            @PathVariable("id_album") Long idAlbum,
             @PathVariable("id_genre") Long idGenre) {
         
-        Artist artist = artistService.findArtist(idArtist);
+        Album album = albumService.findAlbum(idAlbum);
         Genre genre = genreService.findGenre(idGenre);    
         
         //TODO: сделать проверки существования связки artist+genre в таблице artist_genre
-        ArtistGenre artistGenre = new ArtistGenre();
-        artistGenre.setArtist(artist);
-        artistGenre.setGenre(genre);
-        artistGenreService.save(artistGenre);
-        
+        AlbumGenre albumGenre = new AlbumGenre();
+        albumGenre.setAlbum(album);
+        albumGenre.setGenre(genre);
+        albumGenreService.save(albumGenre);        
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     
-    @RequestMapping(value = "{id_artist}/genres/{id_genre}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteGenreFromArtist(
-            @PathVariable("id_artist") Long idArtist,
+    @RequestMapping(value = "{id_album}/genres/{id_genre}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteGenreFromAlbum(
+            @PathVariable("id_album") Long idAlbum,
             @PathVariable("id_genre") Long idGenre) {
         
-        ArtistGenre artistGenre = artistGenreService.findByIdArtistAndIdGenre(idArtist, idGenre);
-        artistGenreService.delete(artistGenre);
-        
+        AlbumGenre albumGenre = albumGenreService.findByIdAlbumAndIdGenre(idAlbum, idGenre);
+        albumGenreService.delete(albumGenre);        
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    
+
 }

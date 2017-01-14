@@ -17,14 +17,17 @@ public class ArtistGenreServiceImpl implements ArtistGenreService {
     @Autowired
     private ArtistGenreRepository artistGenreRepository;
     
+    @Override
     public void save(ArtistGenre artistGenre) {
         artistGenreRepository.save(artistGenre);
     }
     
+    @Override
      public void delete(ArtistGenre artistGenre) {
         artistGenreRepository.delete(artistGenre);
     }
     
+    @Override
     public ArtistGenre findByIdArtistAndIdGenre(Long idArtist, Long idGenre) {
         return artistGenreRepository.findByIdArtistAndIdGenre(idArtist, idGenre);
     }
