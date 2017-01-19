@@ -11,6 +11,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javafx.entity.Album;
+import ru.javafx.entity.Genre;
 
 @Transactional
 @RepositoryRestResource(collectionResourceRel = "albums", path = "albums")
@@ -47,11 +48,11 @@ public interface AlbumRepository extends PagingAndSortingRepository<Album, Long>
         @Param("maxyear") Integer maxyear,
         @Param("id_genre") Long id_genre, 
         @Param("pageable") Pageable pageable);
-    
+
     @RestResource(path = "by_genre", rel = "by_genre")
     @Query("select album from Album album "
             + "right join album.albumGenres as joins "
-            + "where joins.genre.id = :id_genre")
-    List<Album> findByGenre(@Param("id_genre") Long id_genre);
+            + "where joins.genre = :genre")
+    List<Album> findByGenre(@Param("genre") Genre genre);
     
 }
