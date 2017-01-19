@@ -50,9 +50,7 @@ public interface AlbumRepository extends PagingAndSortingRepository<Album, Long>
         @Param("pageable") Pageable pageable);
 
     @RestResource(path = "by_genre", rel = "by_genre")
-    @Query("select album from Album album "
-            + "right join album.albumGenres as joins "
-            + "where joins.genre = :genre")
+    @Query("select albumGenre.album from AlbumGenre albumGenre "
+            + "where albumGenre.genre = :genre")
     List<Album> findByGenre(@Param("genre") Genre genre);
-    
 }

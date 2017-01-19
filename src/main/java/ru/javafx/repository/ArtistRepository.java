@@ -54,11 +54,9 @@ public interface ArtistRepository extends PagingAndSortingRepository<Artist, Lon
     @RestResource(path = "exist_by_name", rel = "exist_by_name")
     @Query("select a from Artist a where trim(lower(a.name)) = trim(lower(:search))")
     Artist existByName(@Param("search") String search);
-
-    @RestResource(path = "by_genre", rel = "by_genre")
-    @Query("select artist from Artist artist "
-            + "right join artist.artistGenres as joins "
-            + "where joins.genre = :genre")
-    List<Artist> findByGenre(@Param("genre") Genre genre);
     
+    @RestResource(path = "by_genre", rel = "by_genre")
+    @Query("select artistGenre.artist from ArtistGenre artistGenre "
+            + "where artistGenre.genre = :genre")
+    List<Artist> findByGenre(@Param("genre") Genre genre);
 }
