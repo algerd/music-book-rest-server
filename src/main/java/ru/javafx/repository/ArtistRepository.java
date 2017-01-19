@@ -58,6 +58,6 @@ public interface ArtistRepository extends PagingAndSortingRepository<Artist, Lon
     @Query("select artist from Artist artist "
             + "right join artist.artistGenres as joins "
             + "where joins.genre.id = :id_genre")
-    List<Artist> findByGenre(@Param("id_genre") Long id_artist);
+    List<Artist> findByGenre(@Param("id_genre") Long id_genre);
         
 }

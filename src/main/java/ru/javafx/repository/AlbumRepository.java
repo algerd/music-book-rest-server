@@ -1,6 +1,7 @@
 
 package ru.javafx.repository;
 
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -46,5 +47,11 @@ public interface AlbumRepository extends PagingAndSortingRepository<Album, Long>
         @Param("maxyear") Integer maxyear,
         @Param("id_genre") Long id_genre, 
         @Param("pageable") Pageable pageable);
+    
+    @RestResource(path = "by_genre", rel = "by_genre")
+    @Query("select album from Album album "
+            + "right join album.albumGenres as joins "
+            + "where joins.genre.id = :id_genre")
+    List<Album> findByGenre(@Param("id_genre") Long id_genre);
     
 }
