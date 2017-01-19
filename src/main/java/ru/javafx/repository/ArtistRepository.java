@@ -20,7 +20,8 @@ public interface ArtistRepository extends PagingAndSortingRepository<Artist, Lon
     Artist findByName(String name);
     
     @RestResource(path = "by_rating", rel = "by_rating")
-    @Query("select a from Artist a where a.rating >= :minrating and a.rating <= :maxrating")
+    @Query("select artist from Artist artist "
+            + "where artist.rating >= :minrating and artist.rating <= :maxrating")
     Page<Artist> searchByRating(
         @Param("minrating") Integer minrating,
         @Param("maxrating") Integer maxrating,
@@ -28,9 +29,9 @@ public interface ArtistRepository extends PagingAndSortingRepository<Artist, Lon
     );
     
     @RestResource(path = "by_name_and_rating", rel = "by_name_and_rating")
-    @Query("select a from Artist a where "
-            + "lower(a.name) like lower(concat(:search, '%')) "
-            + "and a.rating >= :minrating and a.rating <= :maxrating")
+    @Query("select artist from Artist artist where "
+            + "lower(artist.name) like lower(concat(:search, '%')) "
+            + "and artist.rating >= :minrating and artist.rating <= :maxrating")
     Page<Artist> searchByNameAndRating(
         @Param("search") String search,    
         @Param("minrating") Integer minrating,
@@ -39,20 +40,21 @@ public interface ArtistRepository extends PagingAndSortingRepository<Artist, Lon
     );
     
     @RestResource(path = "by_genre_and_rating_and_name", rel = "by_genre_and_rating_and_name")
-    @Query("select a from Artist a "
-            + "right join a.artistGenres as joinartists "
-            + "where lower(a.name) like lower(concat(:search, '%')) "
-            + "and a.rating >= :minrating and a.rating <= :maxrating "
-            + "and joinartists.genre.id = :id_genre")
+    @Query("select artist from Artist artist "
+            + "right join artist.artistGenres as joinartists "
+            + "where lower(artist.name) like lower(concat(:search, '%')) "
+            + "and artist.rating >= :minrating and artist.rating <= :maxrating "
+            + "and joinartists.genre = :genre")
     Page<Artist> searchByGenreAndRatingAndName(
         @Param("search") String search,    
         @Param("minrating") Integer minrating,
         @Param("maxrating") Integer maxrating,    
-        @Param("id_genre") Long id_genre, 
+        @Param("genre") Genre genre, 
         @Param("pageable") Pageable pageable);
         
     @RestResource(path = "exist_by_name", rel = "exist_by_name")
-    @Query("select a from Artist a where trim(lower(a.name)) = trim(lower(:search))")
+    @Query("select artist from Artist artist "
+            + "where trim(lower(artist.name)) = trim(lower(:search))")
     Artist existByName(@Param("search") String search);
     
     @RestResource(path = "by_genre", rel = "by_genre")

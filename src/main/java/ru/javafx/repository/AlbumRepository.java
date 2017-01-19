@@ -34,19 +34,19 @@ public interface AlbumRepository extends PagingAndSortingRepository<Album, Long>
     );
     
     @RestResource(path = "by_name_and_rating_and_year_and_genre", rel = "by_name_and_rating_and_year_and_genre")
-    @Query("select a from Album a "
-            + "right join a.albumGenres as joinalbums "
-            + "where lower(a.name) like lower(concat(:search, '%')) "
-            + "and a.rating >= :minrating and a.rating <= :maxrating "
-            + "and a.year >= :minyear and a.year <= :maxyear "
-            + "and joinalbums.genre.id = :id_genre")
+    @Query("select album from Album album "
+            + "right join album.albumGenres as joinalbums "
+            + "where lower(album.name) like lower(concat(:search, '%')) "
+            + "and album.rating >= :minrating and album.rating <= :maxrating "
+            + "and album.year >= :minyear and album.year <= :maxyear "
+            + "and joinalbums.genre = :genre")
     Page<Album> searchByGenreAndRatingAndName(
         @Param("search") String search,    
         @Param("minrating") Integer minrating,
         @Param("maxrating") Integer maxrating,
         @Param("minyear") Integer minyear,
         @Param("maxyear") Integer maxyear,
-        @Param("id_genre") Long id_genre, 
+        @Param("genre") Genre genre, 
         @Param("pageable") Pageable pageable);
 
     @RestResource(path = "by_genre", rel = "by_genre")
