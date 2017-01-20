@@ -21,7 +21,7 @@ public interface GenreRepository extends PagingAndSortingRepository<Genre, Long>
     Genre findByName(String name);
     
     @RestResource(path = "by_name", rel = "by_name")
-    @Query("select a from Genre a where lower(a.name) like lower(concat(:search, '%')) ")
+    @Query("select genre from Genre genre where lower(genre.name) like lower(concat(:search, '%')) ")
     Page<Genre> searchByName(
         @Param("search") String search,    
         @Param("pageable") Pageable pageable
@@ -38,7 +38,7 @@ public interface GenreRepository extends PagingAndSortingRepository<Genre, Long>
     List<Genre> findByAlbum(@Param("album") Album album);
     
     @RestResource(path = "exist_by_name", rel = "exist_by_name")
-    @Query("select g from Genre g where trim(lower(g.name)) = trim(lower(:search))")
+    @Query("select genre from Genre genre where trim(lower(genre.name)) = trim(lower(:search))")
     Genre existByName(@Param("search") String search);
     
 }

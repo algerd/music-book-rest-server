@@ -20,10 +20,10 @@ public interface AlbumRepository extends PagingAndSortingRepository<Album, Long>
     Album findByName(String name);
     
     @RestResource(path = "by_name_and_rating_and_year", rel = "by_name_and_rating_and_year")
-    @Query("select a from Album a where "
-            + "lower(a.name) like lower(concat(:search, '%')) "
-            + "and a.rating >= :minrating and a.rating <= :maxrating "
-            + "and a.year >= :minyear and a.year <= :maxyear")
+    @Query("select album from Album album where "
+            + "lower(album.name) like lower(concat(:search, '%')) "
+            + "and album.rating >= :minrating and album.rating <= :maxrating "
+            + "and album.year >= :minyear and album.year <= :maxyear")
     Page<Album> searchByNameAndRating(
         @Param("search") String search,    
         @Param("minrating") Integer minrating,
