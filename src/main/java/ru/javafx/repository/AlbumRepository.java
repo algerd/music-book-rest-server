@@ -33,6 +33,20 @@ public interface AlbumRepository extends PagingAndSortingRepository<Album, Long>
         @Param("pageable") Pageable pageable
     );
     
+    @RestResource(path = "by_artist_name_and_rating_and_year", rel = "by_artist_name_and_rating_and_year")
+    @Query("select album from Album album where "
+            + "lower(album.artist.name) like lower(concat(:search, '%')) "
+            + "and album.rating >= :minrating and album.rating <= :maxrating "
+            + "and album.year >= :minyear and album.year <= :maxyear")
+    Page<Album> searchByArtistNameAndRating(
+        @Param("search") String search,    
+        @Param("minrating") Integer minrating,
+        @Param("maxrating") Integer maxrating,
+        @Param("minyear") Integer minyear,
+        @Param("maxyear") Integer maxyear,       
+        @Param("pageable") Pageable pageable
+    );
+    
     @RestResource(path = "by_name_and_rating_and_year_and_genre", rel = "by_name_and_rating_and_year_and_genre")
     @Query("select album from Album album "
             + "right join album.albumGenres as joinalbums "
@@ -47,7 +61,23 @@ public interface AlbumRepository extends PagingAndSortingRepository<Album, Long>
         @Param("minyear") Integer minyear,
         @Param("maxyear") Integer maxyear,
         @Param("genre") Genre genre, 
-        @Param("pageable") Pageable pageable);
+        @Param("pageable") Pageable pageable); 
+    
+    @RestResource(path = "by_artist_name_and_rating_and_year_and_genre", rel = "by_artist_name_and_rating_and_year_and_genre")
+    @Query("select album from Album album "
+            + "right join album.albumGenres as joinalbums "
+            + "where lower(album.artist.name) like lower(concat(:search, '%')) "
+            + "and album.rating >= :minrating and album.rating <= :maxrating "
+            + "and album.year >= :minyear and album.year <= :maxyear "
+            + "and joinalbums.genre = :genre")
+    Page<Album> searchByGenreAndRatingAndArtistName(
+        @Param("search") String search,    
+        @Param("minrating") Integer minrating,
+        @Param("maxrating") Integer maxrating,
+        @Param("minyear") Integer minyear,
+        @Param("maxyear") Integer maxyear,
+        @Param("genre") Genre genre, 
+        @Param("pageable") Pageable pageable);    
 
     @RestResource(path = "by_genre", rel = "by_genre")
     @Query("select albumGenre.album from AlbumGenre albumGenre "

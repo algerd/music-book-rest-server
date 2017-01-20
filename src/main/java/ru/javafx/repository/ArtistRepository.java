@@ -19,15 +19,6 @@ public interface ArtistRepository extends PagingAndSortingRepository<Artist, Lon
 
     Artist findByName(String name);
     
-    @RestResource(path = "by_rating", rel = "by_rating")
-    @Query("select artist from Artist artist "
-            + "where artist.rating >= :minrating and artist.rating <= :maxrating")
-    Page<Artist> searchByRating(
-        @Param("minrating") Integer minrating,
-        @Param("maxrating") Integer maxrating,
-        @Param("pageable") Pageable pageable
-    );
-    
     @RestResource(path = "by_name_and_rating", rel = "by_name_and_rating")
     @Query("select artist from Artist artist where "
             + "lower(artist.name) like lower(concat(:search, '%')) "
