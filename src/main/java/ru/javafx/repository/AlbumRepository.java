@@ -18,66 +18,25 @@ import ru.javafx.entity.Genre;
 public interface AlbumRepository extends PagingAndSortingRepository<Album, Long> {
     
     Album findByName(String name);
-    
-    @RestResource(path = "by_name_and_rating_and_year", rel = "by_name_and_rating_and_year")
-    @Query("select album from Album album where "
-            + "lower(album.name) like lower(concat(:search, '%')) "
-            + "and album.rating >= :minrating and album.rating <= :maxrating "
-            + "and album.year >= :minyear and album.year <= :maxyear")
-    Page<Album> searchByNameAndRating(
-        @Param("search") String search,    
-        @Param("minrating") Integer minrating,
-        @Param("maxrating") Integer maxrating,
-        @Param("minyear") Integer minyear,
-        @Param("maxyear") Integer maxyear,       
-        @Param("pageable") Pageable pageable
-    );
-    
-    @RestResource(path = "by_artist_name_and_rating_and_year", rel = "by_artist_name_and_rating_and_year")
-    @Query("select album from Album album where "
-            + "lower(album.artist.name) like lower(concat(:search, '%')) "
-            + "and album.rating >= :minrating and album.rating <= :maxrating "
-            + "and album.year >= :minyear and album.year <= :maxyear")
-    Page<Album> searchByArtistNameAndRating(
-        @Param("search") String search,    
-        @Param("minrating") Integer minrating,
-        @Param("maxrating") Integer maxrating,
-        @Param("minyear") Integer minyear,
-        @Param("maxyear") Integer maxyear,       
-        @Param("pageable") Pageable pageable
-    );
-    
-    @RestResource(path = "by_name_and_rating_and_year_and_genre", rel = "by_name_and_rating_and_year_and_genre")
-    @Query("select album from Album album "
-            + "right join album.albumGenres as joinalbums "
-            + "where lower(album.name) like lower(concat(:search, '%')) "
+       
+    @RestResource(path = "get_albums", rel = "get_albums")
+    @Query("select distinct album from Album album "
+            + "inner join album.albumGenres as joinalbums "
+            + "where (lower(:selector_search) != 'album' or lower(album.name) like lower(concat(:search, '%'))) "
+            + "and (lower(:selector_search) != 'artist' or lower(album.artist.name) like lower(concat(:search, '%')))"
             + "and album.rating >= :minrating and album.rating <= :maxrating "
             + "and album.year >= :minyear and album.year <= :maxyear "
-            + "and joinalbums.genre = :genre")
-    Page<Album> searchByGenreAndRatingAndName(
+            + "and (:selector_genre = 0 or joinalbums.genre = :genre)")
+    Page<Album> getAlbums(
         @Param("search") String search,    
         @Param("minrating") Integer minrating,
         @Param("maxrating") Integer maxrating,
         @Param("minyear") Integer minyear,
         @Param("maxyear") Integer maxyear,
+        @Param("selector_genre") Integer selector_genre,
+        @Param("selector_search") String selector_search,
         @Param("genre") Genre genre, 
         @Param("pageable") Pageable pageable); 
-    
-    @RestResource(path = "by_artist_name_and_rating_and_year_and_genre", rel = "by_artist_name_and_rating_and_year_and_genre")
-    @Query("select album from Album album "
-            + "right join album.albumGenres as joinalbums "
-            + "where lower(album.artist.name) like lower(concat(:search, '%')) "
-            + "and album.rating >= :minrating and album.rating <= :maxrating "
-            + "and album.year >= :minyear and album.year <= :maxyear "
-            + "and joinalbums.genre = :genre")
-    Page<Album> searchByGenreAndRatingAndArtistName(
-        @Param("search") String search,    
-        @Param("minrating") Integer minrating,
-        @Param("maxrating") Integer maxrating,
-        @Param("minyear") Integer minyear,
-        @Param("maxyear") Integer maxyear,
-        @Param("genre") Genre genre, 
-        @Param("pageable") Pageable pageable);    
 
     @RestResource(path = "by_genre", rel = "by_genre")
     @Query("select albumGenre.album from AlbumGenre albumGenre "
