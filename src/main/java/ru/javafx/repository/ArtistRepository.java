@@ -18,30 +18,20 @@ import ru.javafx.entity.Genre;
 public interface ArtistRepository extends PagingAndSortingRepository<Artist, Long> {
 
     Artist findByName(String name);
-    
-    @RestResource(path = "by_name_and_rating", rel = "by_name_and_rating")
-    @Query("select artist from Artist artist where "
-            + "lower(artist.name) like lower(concat(:search, '%')) "
-            + "and artist.rating >= :minrating and artist.rating <= :maxrating")
-    Page<Artist> searchByNameAndRating(
-        @Param("search") String search,    
-        @Param("minrating") Integer minrating,
-        @Param("maxrating") Integer maxrating,
-        @Param("pageable") Pageable pageable
-    );
-    
-    @RestResource(path = "by_genre_and_rating_and_name", rel = "by_genre_and_rating_and_name")
-    @Query("select artist from Artist artist "
-            + "right join artist.artistGenres as joinartists "
+       
+    @RestResource(path = "search_artists", rel = "search_artists")
+    @Query("select distinct artist from Artist artist "
+            + "right join artist.artistGenres as joins "
             + "where lower(artist.name) like lower(concat(:search, '%')) "
             + "and artist.rating >= :minrating and artist.rating <= :maxrating "
-            + "and joinartists.genre = :genre")
-    Page<Artist> searchByGenreAndRatingAndName(
+            + "and (:selector_genre = 0 or joins.genre = :genre)")
+    Page<Artist> searchArtists(
         @Param("search") String search,    
         @Param("minrating") Integer minrating,
-        @Param("maxrating") Integer maxrating,    
+        @Param("maxrating") Integer maxrating, 
+        @Param("selector_genre") Integer selector_genre,
         @Param("genre") Genre genre, 
-        @Param("pageable") Pageable pageable);
+        @Param("pageable") Pageable pageable); 
         
     @RestResource(path = "exist_by_name", rel = "exist_by_name")
     @Query("select artist from Artist artist "

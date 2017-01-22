@@ -19,7 +19,7 @@ public interface AlbumRepository extends PagingAndSortingRepository<Album, Long>
     
     Album findByName(String name);
        
-    @RestResource(path = "get_albums", rel = "get_albums")
+    @RestResource(path = "search_albums", rel = "search_albums")
     @Query("select distinct album from Album album "
             + "inner join album.albumGenres as joinalbums "
             + "where (lower(:selector_search) != 'album' or lower(album.name) like lower(concat(:search, '%'))) "
@@ -27,7 +27,7 @@ public interface AlbumRepository extends PagingAndSortingRepository<Album, Long>
             + "and album.rating >= :minrating and album.rating <= :maxrating "
             + "and album.year >= :minyear and album.year <= :maxyear "
             + "and (:selector_genre = 0 or joinalbums.genre = :genre)")
-    Page<Album> getAlbums(
+    Page<Album> searchAlbums(
         @Param("search") String search,    
         @Param("minrating") Integer minrating,
         @Param("maxrating") Integer maxrating,
