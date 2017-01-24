@@ -1,10 +1,14 @@
 
 package ru.javafx.repository;
 
+import com.querydsl.core.types.dsl.StringPath;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
+import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -12,12 +16,29 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javafx.entity.Artist;
 import ru.javafx.entity.Genre;
+import ru.javafx.entity.QArtist;
 
 @Transactional
 @RepositoryRestResource(collectionResourceRel = "artists", path = "artists")
-public interface ArtistRepository extends PagingAndSortingRepository<Artist, Long> {
+public interface ArtistRepository extends 
+        PagingAndSortingRepository<Artist, Long>, 
+        QueryDslPredicateExecutor<Artist>, 
+        QuerydslBinderCustomizer<QArtist> {
+    
+    default void customize(QuerydslBindings bindings, QArtist artist) {
+        bindings.bind(artist.name).first((path, value) -> {
+            System.out.println("path: " + path.getMetadata());
+            System.out.println("value: " + value);
+            return path.contains(value);
+        });        
+        bindings.bind(String.class).first((StringPath path, String value) -> {
+            System.out.println("path: " + path.getMetadata());
+            System.out.println("value: " + value);
+            return path.containsIgnoreCase(value);
+        });
+    }  
 
-    Artist findByName(String name);
+    //Artist findByName(String name);
        
     @RestResource(path = "search_artists", rel = "search_artists")
     @Query("select distinct artist from Artist artist "
