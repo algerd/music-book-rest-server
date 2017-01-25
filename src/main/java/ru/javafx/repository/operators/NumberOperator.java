@@ -1,5 +1,5 @@
 
-package ru.javafx.repository;
+package ru.javafx.repository.operators;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberPath;

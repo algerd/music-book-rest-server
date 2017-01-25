@@ -1,10 +1,6 @@
 
 package ru.javafx.repository;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.StringPath;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javafx.entity.Artist;
 import ru.javafx.entity.Genre;
 import ru.javafx.entity.QArtist;
+import ru.javafx.repository.operators.OperatorUtils;
 
 @Transactional
 @RepositoryRestResource(collectionResourceRel = "artists", path = "artists")
@@ -39,13 +36,9 @@ public interface ArtistRepository extends
             logger.info("{}={}", path.toString(), value);
             return path.contains(value);
         }); 
-        
-        //http://localhost:8080/api/artists?ratingGt=5 (rating > 5)
-        bindings.bind(artist.rating).as("rating" + NumberOperator.GT).first((path, value) -> {
-            logger.info("{}={}", path.toString(), value);       
-            return NumberOperator.GT.toPredicate(path, value);   
-            //return path.gt(value); 
-        }); 
+
+        //http://localhost:8080/api/artists?artist.ratingGt=5 (rating > 5) (??? artist.rating.gt=5)
+        OperatorUtils.expressNumberOperators(artist.rating, bindings);
         
         /*
         //http://localhost:8080/api/artists?description=good
@@ -59,14 +52,15 @@ public interface ArtistRepository extends
         bindings.bind(artist.albums.any().name).first((path, value) -> {
             logger.info("{}={}", path.toString(), value);
             return path.eq(value);
-        });       
+        });
+        */
         //http://localhost:8080/api/artists?artistGenres.genre.name=Rock
         //http://localhost:8080/api/artists?artistGenres.genre.name=Rock&sort=name,asc
         bindings.bind(artist.artistGenres.any().genre.name).first((path, value) -> {
             logger.info("{}={}", path.toString(), value);
             return path.eq(value);
         });
-        */
+        
         /*
         String methodName = "";           
         Method method = null;
