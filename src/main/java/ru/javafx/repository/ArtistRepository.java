@@ -3,6 +3,8 @@ package ru.javafx.repository;
 
 import com.querydsl.core.types.dsl.StringPath;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -25,16 +27,34 @@ public interface ArtistRepository extends
         QueryDslPredicateExecutor<Artist>, 
         QuerydslBinderCustomizer<QArtist> {
     
+    final static Logger logger = LoggerFactory.getLogger(ArtistRepository.class);
+    
+    @Override
     default void customize(QuerydslBindings bindings, QArtist artist) {
+        //http://localhost:8080/api/artists?name=Metallica
         bindings.bind(artist.name).first((path, value) -> {
-            System.out.println("path: " + path.getMetadata());
-            System.out.println("value: " + value);
+            logger.info("{}={}", path.toString(), value);
             return path.contains(value);
-        });        
+        }); 
+        //http://localhost:8080/api/artists?rating=5
+        bindings.bind(artist.rating).first((path, value) -> {
+            logger.info("{}={}", path.toString(), value);
+            return path.gt(value);
+        }); 
+        //http://localhost:8080/api/artists?description=good
         bindings.bind(String.class).first((StringPath path, String value) -> {
-            System.out.println("path: " + path.getMetadata());
-            System.out.println("value: " + value);
+            logger.info("{}={}", path.toString(), value);
             return path.containsIgnoreCase(value);
+        });        
+        //http://localhost:8080/api/artists?albums.name=453
+        bindings.bind(artist.albums.any().name).first((path, value) -> {
+            logger.info("{}={}", path.toString(), value);
+            return path.eq(value);
+        });       
+        //http://localhost:8080/api/artists?artistGenres.genre.name=Rock
+        bindings.bind(artist.artistGenres.any().genre.name).first((path, value) -> {
+            logger.info("{}={}", path.toString(), value);
+            return path.eq(value);
         });
     }  
 
