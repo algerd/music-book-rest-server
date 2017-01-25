@@ -1,7 +1,10 @@
 
 package ru.javafx.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.StringPath;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,26 +39,45 @@ public interface ArtistRepository extends
             logger.info("{}={}", path.toString(), value);
             return path.contains(value);
         }); 
-        //http://localhost:8080/api/artists?rating=5
-        bindings.bind(artist.rating).first((path, value) -> {
-            logger.info("{}={}", path.toString(), value);
-            return path.gt(value);
+        
+        //http://localhost:8080/api/artists?ratingGt=5 (rating > 5)
+        bindings.bind(artist.rating).as("rating" + NumberOperator.GT).first((path, value) -> {
+            logger.info("{}={}", path.toString(), value);       
+            return NumberOperator.GT.toPredicate(path, value);   
+            //return path.gt(value); 
         }); 
+        
+        /*
         //http://localhost:8080/api/artists?description=good
         bindings.bind(String.class).first((StringPath path, String value) -> {
             logger.info("{}={}", path.toString(), value);
-            return path.containsIgnoreCase(value);
-        });        
+            return path.containsIgnoreCase(value);         
+        });
+        */
+        /*
         //http://localhost:8080/api/artists?albums.name=453
         bindings.bind(artist.albums.any().name).first((path, value) -> {
             logger.info("{}={}", path.toString(), value);
             return path.eq(value);
         });       
         //http://localhost:8080/api/artists?artistGenres.genre.name=Rock
+        //http://localhost:8080/api/artists?artistGenres.genre.name=Rock&sort=name,asc
         bindings.bind(artist.artistGenres.any().genre.name).first((path, value) -> {
             logger.info("{}={}", path.toString(), value);
             return path.eq(value);
         });
+        */
+        /*
+        String methodName = "";           
+        Method method = null;
+        try {
+            method = path.getClass().getMethod(methodName);
+            method.invoke(path, value);
+        } 
+        catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) { 
+            e.printStackTrace();
+        }           
+        */
     }  
 
     //Artist findByName(String name);
