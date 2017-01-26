@@ -56,13 +56,13 @@ public interface ArtistRepository extends
             return path.gt(value);
         }); 
         
-        /*
+      
         //http://localhost:8080/api/artists?name=Metallica
         bindings.bind(artist.name).first((path, value) -> {
             logger.info("{}={}", path.toString(), value);
             return path.contains(value);
         }); 
-        */       
+               
         /*
         //http://localhost:8080/api/artists?description=good
         bindings.bind(String.class).first((StringPath path, String value) -> {

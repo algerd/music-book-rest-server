@@ -1,0 +1,11 @@
+1. поисковая строка:
+search=artist.rating.gt(10).and.artist.genre.containsIgnoreCase(rock)
+
+2. в search(String search) методе распарсить search-строку и поместить в List объектов Criterion:
+Сriterion {
+    private final String propertyName;
+    private final Operator operator;
+    private final Object compareTo;
+}
+
+3. Сделать поиск на Criteria как в коде книги.
