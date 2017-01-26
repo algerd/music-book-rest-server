@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javafx.entity.Artist;
 import ru.javafx.entity.Genre;
 import ru.javafx.entity.QArtist;
+import ru.javafx.repository.operators.NumberOperator;
 import ru.javafx.repository.operators.OperatorUtils;
 
 @Transactional
@@ -30,16 +31,38 @@ public interface ArtistRepository extends
     final static Logger logger = LoggerFactory.getLogger(ArtistRepository.class);
     
     @Override
-    default void customize(QuerydslBindings bindings, QArtist artist) {
+    default void customize(QuerydslBindings bindings, QArtist artist) {       
+        /*
+        Не работает, потому что регистрируются все альясы, но ко всем альяса применяется только последний
+        зарегистрированный лямбда-метод. Это значит, что для одного пути можно зарегистрировать только один 
+        метод и поэтому выбор действия должен быть только внутри этого метода из строкового значения value.
+        Этот подход не применим для числовых полей, потому что нет возможности объединить команду с числовым 
+        value. Для них надо как-то делать кастомные репо.
+        
+        Вывод:
+        */
+        //http://localhost:8080/api/artists?artist.nameContains=Metallica (or artist.name.contains=Metallica)
+        //OperatorUtils.registerStringOperators(artist.name, bindings);        
+        //http://localhost:8080/api/artists?artist.ratingGt=5 (rating > 5) (or artist.rating.gt=5)
+        //OperatorUtils.registerNumberOperators(artist.rating, bindings);
+        /*
+        bindings.bind(artist.rating).first((path, value) -> { 
+            logger.info("{}={}", path.toString(), value);
+            return NumberOperator.GT.toPredicate(path, value);
+        });
+        */ 
+        bindings.bind(artist.rating).first((path, value) -> {               
+            logger.info("{}={}", path.toString(), value);
+            return path.gt(value);
+        }); 
+        
+        /*
         //http://localhost:8080/api/artists?name=Metallica
         bindings.bind(artist.name).first((path, value) -> {
             logger.info("{}={}", path.toString(), value);
             return path.contains(value);
         }); 
-
-        //http://localhost:8080/api/artists?artist.ratingGt=5 (rating > 5) (??? artist.rating.gt=5)
-        OperatorUtils.expressNumberOperators(artist.rating, bindings);
-        
+        */       
         /*
         //http://localhost:8080/api/artists?description=good
         bindings.bind(String.class).first((StringPath path, String value) -> {
@@ -54,13 +77,14 @@ public interface ArtistRepository extends
             return path.eq(value);
         });
         */
+        /*
         //http://localhost:8080/api/artists?artistGenres.genre.name=Rock
         //http://localhost:8080/api/artists?artistGenres.genre.name=Rock&sort=name,asc
         bindings.bind(artist.artistGenres.any().genre.name).first((path, value) -> {
             logger.info("{}={}", path.toString(), value);
             return path.eq(value);
         });
-        
+        */
         /*
         String methodName = "";           
         Method method = null;
