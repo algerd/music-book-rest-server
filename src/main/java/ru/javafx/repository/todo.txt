@@ -1,11 +1,54 @@
-1. поисковая строка:
-search=artist.rating.gt(10).and.artist.genre.containsIgnoreCase(rock)
+1) Принципы поиска: 
+    Поисковые запросы:
+    .../artists?search=artist.rating.gt(10)artist.genre.name.containsIgnoreCase(rock)
+    Можно без ведущего объекта - значительно сокращается код:
+    search=rating.gt(10)genre.name.containsIgnoreCase(rock)
 
-2. в search(String search) методе распарсить search-строку и поместить в List объектов Criterion:
-Сriterion {
-    private final String propertyName;
-    private final Operator operator;
-    private final Object compareTo;
-}
+    Возможны множества значений:
+    search=rating.bitween(10, 20)genre.name.containsIgnoreCase(rock, hard, pop)
+    
+    Поисковая строка принимается контроллером, распарсивается. Из распарсенных выражений создаюися предикаты
+    и вызывается метод spring data репозиториия c extends QueryDslPredicateExecutor<Artist> Page<T> findAll(Predicate predicate, Pageable pageable),
+    куда передаётся общий предикат, собранный из распарскнных предикатов.
 
-3. Сделать поиск на Criteria как в коде книги.
+    В такой реализации нет смысла в использовании кастомного репозитория. Для каждого репозитория надо создать класс - контейнер предикатов,
+    который будет использоваться при парсинге поисковой строки.
+
+    Проблемы: 
+        1. полученный результат надо перевести в ресурс, чтобы возвращать ресурс.
+        2.(нет) создать вручную ссылку на поисковый ресурс (решается с помощью процессора), если не использовать
+        общий путь к ресурсу(.../artists/get?search=...). Но лучше и логичнее использовать общий путь к ресурсу
+        .../artists?search=...
+
+2) Парсинг поисковой строки:
+    1. Разбить строку по символу "("
+    2. Разбить или извлечь:
+        - вырезать подстроку после последней(включая) "."  и убрать из неё "."- метод(operator)
+        - вырезать подстроку перед(включая) ")" следующей подстроки и убрать из неё ")" - значение(value)
+        - оставшаяся подстрока - property
+    2.1. В случае множества значений - значения разбить по "," и занести в список.
+    3. Результаты подстрок занести в объекты  Сriterion:
+        - поиск и сравнение property со списком доступных property для данной энтити.
+        - По найденному property энтити сравнить доступный метод с переданным operator
+        - По найденному property энтити сравнить тип value.
+        Если проверки прошли успешно - создать критерион, если нет - или пропустить результаты подстроки и перейти к следующей
+        или выдать ошибку.
+        Сriterion {
+            private final String property;
+            private final Operator operator;
+            private final Object value;
+        }
+        И эти объекты занести в список List<Сriterion> или создать объект Criterions, в котором будет список List<Сriterion>
+    
+3) Предикат:
+    1. В цикле перебрать List<Сriterion> и создать List<Predicate> или объект Predicates, в котором будет список List<Predicate>
+    2. В цикле перебрать List<Predicate> и создать общий Predicate.
+    Можно сразу перебирать List<Сriterion> и создавать общий Predicate.
+
+4) Репозиторий:
+    1. Вызвать метод Page<T> findAll(Predicate predicate, Pageable pageable) и передать ему полученный предикат.
+
+5) Ресурс:
+    1. Полученный результат перевести в Resource.
+
+

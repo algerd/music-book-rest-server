@@ -8,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
-import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
-import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -17,21 +15,18 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javafx.entity.Artist;
 import ru.javafx.entity.Genre;
-import ru.javafx.entity.QArtist;
-import ru.javafx.repository.operators.NumberOperator;
-import ru.javafx.repository.operators.OperatorUtils;
 
 @Transactional
 @RepositoryRestResource(collectionResourceRel = "artists", path = "artists")
 public interface ArtistRepository extends 
         PagingAndSortingRepository<Artist, Long>, 
-        QueryDslPredicateExecutor<Artist>, 
-        QuerydslBinderCustomizer<QArtist> {
+        QueryDslPredicateExecutor<Artist> {
+        //QuerydslBinderCustomizer<QArtist> {
     
     final static Logger logger = LoggerFactory.getLogger(ArtistRepository.class);
     
-    @Override
-    default void customize(QuerydslBindings bindings, QArtist artist) {       
+    //@Override
+    //default void customize(QuerydslBindings bindings, QArtist artist) {       
         /*
         Не работает, потому что регистрируются все альясы, но ко всем альяса применяется только последний
         зарегистрированный лямбда-метод. Это значит, что для одного пути можно зарегистрировать только один 
@@ -51,18 +46,18 @@ public interface ArtistRepository extends
             return NumberOperator.GT.toPredicate(path, value);
         });
         */ 
+        /*
         bindings.bind(artist.rating).first((path, value) -> {               
             logger.info("{}={}", path.toString(), value);
             return path.gt(value);
         }); 
-        
-      
+          
         //http://localhost:8080/api/artists?name=Metallica
         bindings.bind(artist.name).first((path, value) -> {
             logger.info("{}={}", path.toString(), value);
             return path.contains(value);
         }); 
-               
+        */       
         /*
         //http://localhost:8080/api/artists?description=good
         bindings.bind(String.class).first((StringPath path, String value) -> {
@@ -96,9 +91,9 @@ public interface ArtistRepository extends
             e.printStackTrace();
         }           
         */
-    }  
+    //}  
 
-    //Artist findByName(String name);
+    Artist findByName(String name);
        
     @RestResource(path = "search_artists", rel = "search_artists")
     @Query("select distinct artist from Artist artist "
