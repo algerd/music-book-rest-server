@@ -1,6 +1,7 @@
 
 package ru.javafx.repository;
 
+import java.util.Iterator;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
+import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -15,31 +18,55 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javafx.entity.Artist;
 import ru.javafx.entity.Genre;
+import ru.javafx.entity.QArtist;
 
 @Transactional
 @RepositoryRestResource(collectionResourceRel = "artists", path = "artists")
 public interface ArtistRepository extends 
         PagingAndSortingRepository<Artist, Long>, 
-        QueryDslPredicateExecutor<Artist> {
-        //QuerydslBinderCustomizer<QArtist> {
+        QueryDslPredicateExecutor<Artist>,
+        QuerydslBinderCustomizer<QArtist> {
     
     final static Logger logger = LoggerFactory.getLogger(ArtistRepository.class);
     
     //@Override
-    //default void customize(QuerydslBindings bindings, QArtist artist) {       
-        /*
-        Не работает, потому что регистрируются все альясы, но ко всем альяса применяется только последний
-        зарегистрированный лямбда-метод. Это значит, что для одного пути можно зарегистрировать только один 
-        метод и поэтому выбор действия должен быть только внутри этого метода из строкового значения value.
-        Этот подход не применим для числовых полей, потому что нет возможности объединить команду с числовым 
-        value. Для них надо как-то делать кастомные репо.
-        
-        Вывод:
-        */
+    default void customize(QuerydslBindings bindings, QArtist artist) {       
+       
         //http://localhost:8080/api/artists?artist.nameContains=Metallica (or artist.name.contains=Metallica)
         //OperatorUtils.registerStringOperators(artist.name, bindings);        
         //http://localhost:8080/api/artists?artist.ratingGt=5 (rating > 5) (or artist.rating.gt=5)
         //OperatorUtils.registerNumberOperators(artist.rating, bindings);
+        
+        //http://localhost:8080/api/artists?rating=5&rating=7   (rating >= 5 and rating <= 7)
+        //http://localhost:8080/api/artists?rating=5&rating=5   (rating == 5)
+        //http://localhost:8080/api/artists?rating=5            (rating >= 5)
+        //http://localhost:8080/api/artists?rating=0&rating=5   (rating <= 5)
+        bindings.bind(artist.rating).all((path, value) -> {
+            Iterator<? extends Integer> it = value.iterator();
+            Integer val1 = it.next();
+            if (it.hasNext()) {
+                return path.between(val1, it.next());
+            } else {
+                return path.goe(val1);
+            }
+        });
+        
+        //http://localhost:8080/api/artists?name=Metallica  eq("Metallica") 
+        //http://localhost:8080/api/artists?name=contains&name=tallica  contains()
+        bindings.bind(artist.name).all((path, value) -> {
+            Iterator<? extends String> it = value.iterator();
+            String operator = it.next().trim().toLowerCase(); 
+            if (it.hasNext()) {
+                if (operator.equals("contains")) {
+                    return path.contains(it.next());
+                } else {
+                    return path.containsIgnoreCase(it.next());    
+                }
+            } else {
+                return path.eq(operator);
+            }            
+        });
+        
         /*
         bindings.bind(artist.rating).first((path, value) -> { 
             logger.info("{}={}", path.toString(), value);
@@ -51,7 +78,8 @@ public interface ArtistRepository extends
             logger.info("{}={}", path.toString(), value);
             return path.gt(value);
         }); 
-          
+        
+        /*  
         //http://localhost:8080/api/artists?name=Metallica
         bindings.bind(artist.name).first((path, value) -> {
             logger.info("{}={}", path.toString(), value);
@@ -91,7 +119,7 @@ public interface ArtistRepository extends
             e.printStackTrace();
         }           
         */
-    //}  
+    }  
 
     Artist findByName(String name);
        

@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.javafx.entity.Artist;
 import ru.javafx.repository.ArtistRepository;
 
-@RestController
-@RequestMapping(value = "api/")
+//@RestController
+//@RequestMapping(value = "api/")
 public class SearchController {
-    
+    /*
     private final Logger logger = LoggerFactory.getLogger(getClass());
     
     @Autowired
@@ -36,5 +36,5 @@ public class SearchController {
         Page<Artist> artists = artistRepository.findAll(predicate, pageable);
         return new ResponseEntity<>(assembler.toResource(artists), HttpStatus.OK);        
     }
-
+    */
 }
