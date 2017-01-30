@@ -1,7 +1,6 @@
 
 package ru.javafx.repository;
 
-import java.util.Iterator;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javafx.entity.Artist;
 import ru.javafx.entity.Genre;
 import ru.javafx.entity.QArtist;
+import ru.javafx.repository.operators.NumberMultiValueBinding;
+import ru.javafx.repository.operators.StringMultiValueBinding;
 
 @Transactional
 @RepositoryRestResource(collectionResourceRel = "artists", path = "artists")
@@ -27,101 +28,39 @@ public interface ArtistRepository extends
         QueryDslPredicateExecutor<Artist>,
         QuerydslBinderCustomizer<QArtist> {
     
-    final static Logger logger = LoggerFactory.getLogger(ArtistRepository.class);
+    final static Logger LOGGER = LoggerFactory.getLogger(ArtistRepository.class);
     
-    //@Override
-    default void customize(QuerydslBindings bindings, QArtist artist) {       
-       
-        //http://localhost:8080/api/artists?artist.nameContains=Metallica (or artist.name.contains=Metallica)
-        //OperatorUtils.registerStringOperators(artist.name, bindings);        
-        //http://localhost:8080/api/artists?artist.ratingGt=5 (rating > 5) (or artist.rating.gt=5)
-        //OperatorUtils.registerNumberOperators(artist.rating, bindings);
+    @Override
+    default void customize(QuerydslBindings bindings, QArtist artist) { 
+        /*
+            Default pathes:
+        */
+        //http://localhost:8080/api/artists?name=Metallica  eq("Metallica") 
+        //http://localhost:8080/api/artists?name=contains&name=tallica  contains("tallica")
+        bindings.bind(String.class).all(new StringMultiValueBinding()); 
+        // можно пропустить, указан выше
+        //bindings.bind(artist.name).all(new StringMultiValueBinding());
         
         //http://localhost:8080/api/artists?rating=5&rating=7   (rating >= 5 and rating <= 7)
-        //http://localhost:8080/api/artists?rating=5&rating=5   (rating == 5)
-        //http://localhost:8080/api/artists?rating=5            (rating >= 5)
-        //http://localhost:8080/api/artists?rating=0&rating=5   (rating <= 5)
-        bindings.bind(artist.rating).all((path, value) -> {
-            Iterator<? extends Integer> it = value.iterator();
-            Integer val1 = it.next();
-            if (it.hasNext()) {
-                return path.between(val1, it.next());
-            } else {
-                return path.goe(val1);
-            }
-        });
-        
-        //http://localhost:8080/api/artists?name=Metallica  eq("Metallica") 
-        //http://localhost:8080/api/artists?name=contains&name=tallica  contains()
-        bindings.bind(artist.name).all((path, value) -> {
-            Iterator<? extends String> it = value.iterator();
-            String operator = it.next().trim().toLowerCase(); 
-            if (it.hasNext()) {
-                if (operator.equals("contains")) {
-                    return path.contains(it.next());
-                } else {
-                    return path.containsIgnoreCase(it.next());    
-                }
-            } else {
-                return path.eq(operator);
-            }            
-        });
+        //http://localhost:8080/api/artists?rating=5            (rating == 5)
+        bindings.bind(Integer.class).all(new NumberMultiValueBinding<>());       
+        // можно пропустить, указан выше
+        //bindings.bind(artist.rating).all(new NumberMultiValueBinding<>());
         
         /*
-        bindings.bind(artist.rating).first((path, value) -> { 
-            logger.info("{}={}", path.toString(), value);
-            return NumberOperator.GT.toPredicate(path, value);
-        });
-        */ 
-        /*
-        bindings.bind(artist.rating).first((path, value) -> {               
-            logger.info("{}={}", path.toString(), value);
-            return path.gt(value);
-        }); 
-        
-        /*  
-        //http://localhost:8080/api/artists?name=Metallica
-        bindings.bind(artist.name).first((path, value) -> {
-            logger.info("{}={}", path.toString(), value);
-            return path.contains(value);
-        }); 
-        */       
-        /*
-        //http://localhost:8080/api/artists?description=good
-        bindings.bind(String.class).first((StringPath path, String value) -> {
-            logger.info("{}={}", path.toString(), value);
-            return path.containsIgnoreCase(value);         
-        });
+            Alias pathes:
         */
-        /*
-        //http://localhost:8080/api/artists?albums.name=453
-        bindings.bind(artist.albums.any().name).first((path, value) -> {
-            logger.info("{}={}", path.toString(), value);
-            return path.eq(value);
-        });
-        */
-        /*
-        //http://localhost:8080/api/artists?artistGenres.genre.name=Rock
-        //http://localhost:8080/api/artists?artistGenres.genre.name=Rock&sort=name,asc
-        bindings.bind(artist.artistGenres.any().genre.name).first((path, value) -> {
-            logger.info("{}={}", path.toString(), value);
-            return path.eq(value);
-        });
-        */
-        /*
-        String methodName = "";           
-        Method method = null;
-        try {
-            method = path.getClass().getMethod(methodName);
-            method.invoke(path, value);
-        } 
-        catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) { 
-            e.printStackTrace();
-        }           
-        */
+        //http://localhost:8080/api/artists?albums.any().rating=5&albums.any().rating=10
+        //http://localhost:8080/api/artists?album.rating=5&album.rating=10
+        //http://localhost:8080/api/artists?album.rating=5 
+        bindings.bind(artist.albums.any().rating).as("album.rating").all(new NumberMultiValueBinding<>());
+        bindings.bind(artist.albums.any().songs.any().rating).as("song.rating").all(new NumberMultiValueBinding<>()); 
+                                                         
+        bindings.bind(artist.albums.any().name).as("album.name").all(new StringMultiValueBinding());
+        bindings.bind(artist.artistGenres.any().genre.name).as("genre.name").all(new StringMultiValueBinding());
     }  
 
-    Artist findByName(String name);
+    //Artist findByName(String name);
        
     @RestResource(path = "search_artists", rel = "search_artists")
     @Query("select distinct artist from Artist artist "

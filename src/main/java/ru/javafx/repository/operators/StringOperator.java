@@ -6,49 +6,49 @@ import com.querydsl.core.types.dsl.StringPath;
 
 public enum StringOperator {
     
-    CONTAINS("Contains") {
+    CONTAINS("contains") {
         @Override
         public BooleanExpression toPredicate(StringPath path, String value) {
             return path.contains(value);
         }       
     },
-    CONTAINS_IGNORE_CASE("ContainsIgnoreCase") {
+    CONTAINS_IGNORE_CASE("containsIgnoreCase") {
         @Override
         public BooleanExpression toPredicate(StringPath path, String value) {
             return path.containsIgnoreCase(value);
         }       
     },
-    ENDS_WITH("EndsWith") {
+    ENDS_WITH("endsWith") {
         @Override
         public BooleanExpression toPredicate(StringPath path, String value) {
             return path.endsWith(value);
         }       
     },
-    ENDS_WITH_IGNORE_CASE("EndsWithIgnoreCase") {
+    ENDS_WITH_IGNORE_CASE("endsWithIgnoreCase") {
         @Override
         public BooleanExpression toPredicate(StringPath path, String value) {
             return path.endsWithIgnoreCase(value);
         }       
     },
-    EQ("Eq") {
+    EQ("eq") {
         @Override
         public BooleanExpression toPredicate(StringPath path, String value) {
             return path.eq(value);
         }       
     },
-    EQUALS_IGNORE_CASE("EqualsIgnoreCase") {
+    EQUALS_IGNORE_CASE("equalsIgnoreCase") {
         @Override
         public BooleanExpression toPredicate(StringPath path, String value) {
             return path.equalsIgnoreCase(value);
         }       
     },   
-    LIKE("Like") {
+    LIKE("like") {
         @Override
         public BooleanExpression toPredicate(StringPath path, String value) {
             return path.like(value);
         }       
     },
-    LIKE_IGNORE_CASE("LikeIgnoreCase") {
+    LIKE_IGNORE_CASE("likeIgnoreCase") {
         @Override
         public BooleanExpression toPredicate(StringPath path, String value) {
             return path.likeIgnoreCase(value);
@@ -60,13 +60,13 @@ public enum StringOperator {
             return path.notEqualsIgnoreCase(value);
         }       
     },
-    NOT_LIKE("NotLike") {
+    NOT_LIKE("notLike") {
         @Override
         public BooleanExpression toPredicate(StringPath path, String value) {
             return path.notLike(value);
         }       
     },
-    STARTS_WITH("StartsWith") {
+    STARTS_WITH("startsWith") {
         @Override
         public BooleanExpression toPredicate(StringPath path, String value) {
             return path.startsWith(value);
