@@ -4,8 +4,6 @@ package ru.javafx.repository;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -60,21 +58,7 @@ public interface ArtistRepository extends
         bindings.bind(artist.artistGenres.any().genre.name).as("genre.name").all(new StringMultiValueBinding());
     }  
 
-    //Artist findByName(String name);
-       
-    @RestResource(path = "search_artists", rel = "search_artists")
-    @Query("select distinct artist from Artist artist "
-            + "right join artist.artistGenres as joins "
-            + "where lower(artist.name) like lower(concat(:search, '%')) "
-            + "and artist.rating >= :minrating and artist.rating <= :maxrating "
-            + "and (:selector_genre = 0 or joins.genre = :genre)")
-    Page<Artist> searchArtists(
-        @Param("search") String search,    
-        @Param("minrating") Integer minrating,
-        @Param("maxrating") Integer maxrating, 
-        @Param("selector_genre") Integer selector_genre,
-        @Param("genre") Genre genre, 
-        @Param("pageable") Pageable pageable); 
+    Artist findByName(String name);
         
     @RestResource(path = "exist_by_name", rel = "exist_by_name")
     @Query("select artist from Artist artist "
