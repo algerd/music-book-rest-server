@@ -45,7 +45,7 @@ public interface AlbumRepository extends
         bindings.bind(album.albumGenres.any().genre.id).as("genre.id").all(new NumberMultiValueBinding<>());
     }
     
-    Album findByName(String name);
+    //Album findByName(String name);
        
     @RestResource(path = "by_genre", rel = "by_genre")
     @Query("select albumGenre.album from AlbumGenre albumGenre "

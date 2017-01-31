@@ -60,7 +60,7 @@ public interface ArtistRepository extends
         //bindings.bind(artist.artistGenres.any().genre.name).as("genre.name").all(new StringMultiValueBinding());
     }  
 
-    Artist findByName(String name);
+    //Artist findByName(String name);
         
     @RestResource(path = "exist_by_name", rel = "exist_by_name")
     @Query("select artist from Artist artist "
