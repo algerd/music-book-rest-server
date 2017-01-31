@@ -32,20 +32,14 @@ public interface AlbumRepository extends
     
     @Override
     default void customize(QuerydslBindings bindings, QAlbum album) {
-        /*
-            Default pathes:
-        */
+        // Default pathes:
         bindings.bind(String.class).all(new StringMultiValueBinding()); 
         bindings.bind(Integer.class).all(new NumberMultiValueBinding<>());
              
-        /*
-            Alias pathes:
-        */
+        // Alias pathes:
         //bindings.bind(album.artist.name).all(new StringMultiValueBinding()); // "artist.name" - default
         bindings.bind(album.albumGenres.any().genre.id).as("genre.id").all(new NumberMultiValueBinding<>());
     }
-    
-    //Album findByName(String name);
        
     @RestResource(path = "by_genre", rel = "by_genre")
     @Query("select albumGenre.album from AlbumGenre albumGenre "

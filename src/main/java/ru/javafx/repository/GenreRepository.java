@@ -37,10 +37,5 @@ public interface GenreRepository extends PagingAndSortingRepository<Genre, Long>
     @Query("select albumGenre.genre from AlbumGenre albumGenre "
             + "where albumGenre.album = :album")
     List<Genre> findByAlbum(@Param("album") Album album);
-    
-    @RestResource(path = "exist_by_name", rel = "exist_by_name")
-    @Query("select genre from Genre genre "
-            + "where trim(lower(genre.name)) = trim(lower(:search))")
-    Genre existByName(@Param("search") String search);
-    
+       
 }

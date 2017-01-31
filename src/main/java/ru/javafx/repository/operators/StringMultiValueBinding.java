@@ -19,7 +19,7 @@ public class StringMultiValueBinding implements MultiValueBinding<StringPath, St
         String operator = it.next().trim().toLowerCase();
         //logger.info("operator :{}", operator);
         if (it.hasNext()) {
-            String val = it.next();
+            String val = it.next().trim();
             //logger.info("value :{}", val);
             for (StringOperator stringOperator : StringOperator.values()) {
                 if (operator.equals(stringOperator.toString())) {

@@ -60,13 +60,6 @@ public interface ArtistRepository extends
         //bindings.bind(artist.artistGenres.any().genre.name).as("genre.name").all(new StringMultiValueBinding());
     }  
 
-    //Artist findByName(String name);
-        
-    @RestResource(path = "exist_by_name", rel = "exist_by_name")
-    @Query("select artist from Artist artist "
-            + "where trim(lower(artist.name)) = trim(lower(:search))")
-    Artist existByName(@Param("search") String search);
-    
     @RestResource(path = "by_genre", rel = "by_genre")
     @Query("select artistGenre.artist from ArtistGenre artistGenre "
             + "where artistGenre.genre = :genre")

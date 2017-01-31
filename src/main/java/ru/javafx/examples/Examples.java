@@ -52,4 +52,10 @@ public class Examples {
         @Param("genre") Genre genre, 
         @Param("pageable") Pageable pageable);
     */
+    /*
+    @RestResource(path = "exist_by_name", rel = "exist_by_name")
+    @Query("select genre from Genre genre "
+            + "where trim(lower(genre.name)) = trim(lower(:search))")
+    Genre existByName(@Param("search") String search);
+    */
 }
