@@ -53,6 +53,7 @@ public interface ArtistRepository extends
         //http://localhost:8080/api/artists?album.rating=5 
         bindings.bind(artist.albums.any().rating).as("album.rating").all(new NumberMultiValueBinding<>());       
         bindings.bind(artist.artistGenres.any().genre.id).as("genre.id").all(new NumberMultiValueBinding<>());
+        bindings.bind(artist.albums.any().songs.any().id).as("song.id").all(new NumberMultiValueBinding<>());
         
         //examples:
         //bindings.bind(artist.albums.any().songs.any().rating).as("song.rating").all(new NumberMultiValueBinding<>()); 
