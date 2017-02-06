@@ -15,6 +15,7 @@ import ru.javafx.entity.Album;
 import ru.javafx.entity.Artist;
 import ru.javafx.entity.Genre;
 import ru.javafx.entity.QGenre;
+import ru.javafx.entity.Song;
 import ru.javafx.repository.operators.NumberMultiValueBinding;
 import ru.javafx.repository.operators.StringMultiValueBinding;
 
@@ -42,5 +43,10 @@ public interface GenreRepository extends
     @Query("select albumGenre.genre from AlbumGenre albumGenre "
             + "where albumGenre.album = :album")
     List<Genre> findByAlbum(@Param("album") Album album);
+    
+    @RestResource(path = "by_song", rel = "by_song")
+    @Query("select songGenre.genre from SongGenre songGenre "
+            + "where songGenre.song = :song")
+    List<Genre> findBySong(@Param("song") Song song);
        
 }

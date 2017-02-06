@@ -16,6 +16,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javafx.entity.Album;
+import ru.javafx.entity.Artist;
 import ru.javafx.entity.Genre;
 import ru.javafx.entity.QAlbum;
 import ru.javafx.repository.operators.NumberMultiValueBinding;
@@ -45,4 +46,7 @@ public interface AlbumRepository extends
     @Query("select albumGenre.album from AlbumGenre albumGenre "
             + "where albumGenre.genre = :genre")
     List<Album> findByGenre(@Param("genre") Genre genre);
+    
+    @RestResource(path = "by_artist", rel = "by_artist")
+    List<Album> findByArtist(@Param("artist") Artist artist);
 }
