@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javafx.entity.Album;
 import ru.javafx.entity.Artist;
 import ru.javafx.entity.Genre;
+import ru.javafx.entity.Musician;
 import ru.javafx.entity.QGenre;
 import ru.javafx.entity.Song;
 import ru.javafx.repository.operators.NumberMultiValueBinding;
@@ -48,5 +49,10 @@ public interface GenreRepository extends
     @Query("select songGenre.genre from SongGenre songGenre "
             + "where songGenre.song = :song")
     List<Genre> findBySong(@Param("song") Song song);
+    
+    @RestResource(path = "by_musician", rel = "by_musician")
+    @Query("select musicianGenre.genre from MusicianGenre musicianGenre "
+            + "where musicianGenre.musician = :musician")
+    List<Genre> findByMusician(@Param("musician") Musician musician);
        
 }
