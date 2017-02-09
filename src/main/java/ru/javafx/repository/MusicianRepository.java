@@ -31,6 +31,7 @@ public interface MusicianRepository extends
              
         // Alias pathes:
         bindings.bind(musician.musicianGenres.any().genre.id).as("genre.id").all(new NumberMultiValueBinding<>());
+        bindings.bind(musician.musicianInstruments.any().instrument.id).as("instrument.id").all(new NumberMultiValueBinding<>());
     }
        
 }
