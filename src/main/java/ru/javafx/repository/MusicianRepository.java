@@ -1,14 +1,19 @@
 
 package ru.javafx.repository;
 
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.transaction.annotation.Transactional;
+import ru.javafx.entity.Instrument;
 import ru.javafx.entity.Musician;
 import ru.javafx.entity.QMusician;
 import ru.javafx.repository.operators.NumberMultiValueBinding;
@@ -33,5 +38,10 @@ public interface MusicianRepository extends
         bindings.bind(musician.musicianGenres.any().genre.id).as("genre.id").all(new NumberMultiValueBinding<>());
         bindings.bind(musician.musicianInstruments.any().instrument.id).as("instrument.id").all(new NumberMultiValueBinding<>());
     }
-       
+    
+    @RestResource(path = "by_instrument", rel = "by_instrument")
+    @Query("select musicianInstrument.musician from MusicianInstrument musicianInstrument "
+            + "where musicianInstrument.instrument = :instrument")
+    List<Musician> findByInstrument(@Param("instrument") Instrument instrument);
+    
 }
