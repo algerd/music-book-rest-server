@@ -37,7 +37,9 @@ public interface SongRepository extends
         // Alias pathes:
         //bindings.bind(song.album.name).all(new StringMultiValueBinding()); // "album.name" - default
         //bindings.bind(song.album.artist.name).as("artist.name").all(new StringMultiValueBinding());
+        //bindings.bind(song.album.id).as("album.id").all(new NumberMultiValueBinding<>()); // "album.id" - default
         bindings.bind(song.songGenres.any().genre.id).as("genre.id").all(new NumberMultiValueBinding<>());
+        
     }
 
     @RestResource(path = "by_genre", rel = "by_genre")
