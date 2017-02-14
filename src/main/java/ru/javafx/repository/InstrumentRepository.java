@@ -11,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.transaction.annotation.Transactional;
-import ru.javafx.entity.Genre;
 import ru.javafx.entity.Instrument;
 import ru.javafx.entity.Musician;
 import ru.javafx.entity.QInstrument;
