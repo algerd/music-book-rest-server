@@ -38,6 +38,9 @@ public interface MusicianRepository extends
         // Alias pathes:
         bindings.bind(musician.musicianGenres.any().genre.id).as("genre.id").all(new NumberMultiValueBinding<>());
         bindings.bind(musician.musicianInstruments.any().instrument.id).as("instrument.id").all(new NumberMultiValueBinding<>());
+        bindings.bind(musician.musicianGroups.any().artist.id).as("artist.id").all(new NumberMultiValueBinding<>());
+        bindings.bind(musician.musicianAlbums.any().album.id).as("album.id").all(new NumberMultiValueBinding<>());
+        bindings.bind(musician.musicianSongs.any().song.id).as("song.id").all(new NumberMultiValueBinding<>());
     }
     
     @RestResource(path = "by_instrument", rel = "by_instrument")
