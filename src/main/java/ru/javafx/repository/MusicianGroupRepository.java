@@ -13,6 +13,8 @@ import ru.javafx.entity.MusicianGroup;
 @RepositoryRestResource(collectionResourceRel = "musician_groups", path = "musician_groups")
 public interface MusicianGroupRepository extends PagingAndSortingRepository<MusicianGroup, Long> {
     
+    Long countByMusicianAndArtist(@Param("musician") Musician musician,  @Param("artist") Artist artist);
+    
     MusicianGroup findByMusicianAndArtist(@Param("musician") Musician musician,  @Param("artist") Artist artist);
     
     MusicianGroup findByMusician(@Param("musician") Musician musician);
