@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.transaction.annotation.Transactional;
+import ru.javafx.entity.Album;
 import ru.javafx.entity.Genre;
 import ru.javafx.entity.QSong;
 import ru.javafx.entity.Song;
@@ -46,5 +47,8 @@ public interface SongRepository extends
     @Query("select songGenre.song from SongGenre songGenre "
             + "where songGenre.genre = :genre")
     List<Song> findByGenre(@Param("genre") Genre genre);
+    
+    @RestResource(path = "by_album", rel = "by_album")
+    List<Song> findByAlbum(@Param("album") Album album);
     
 }
