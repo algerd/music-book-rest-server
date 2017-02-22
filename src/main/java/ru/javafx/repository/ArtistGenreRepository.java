@@ -14,5 +14,7 @@ import ru.javafx.entity.Genre;
 public interface ArtistGenreRepository extends PagingAndSortingRepository<ArtistGenre, Long> {
     
     ArtistGenre findByArtistAndGenre(@Param("artist") Artist artist, @Param("genre") Genre genre);
-
+    
+    Long countByArtistAndGenre(@Param("artist") Artist artist, @Param("genre") Genre genre);
+    
 }
