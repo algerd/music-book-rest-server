@@ -15,4 +15,6 @@ public interface AlbumGenreRepository extends PagingAndSortingRepository<AlbumGe
 
     AlbumGenre findByAlbumAndGenre(@Param("album") Album album, @Param("genre") Genre genre);
     
+    Long countByAlbumAndGenre(@Param("album") Album album, @Param("genre") Genre genre);
+    
 }
