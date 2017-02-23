@@ -15,4 +15,6 @@ public interface SongGenreRepository extends PagingAndSortingRepository<SongGenr
     
     SongGenre findBySongAndGenre(@Param("song") Song song, @Param("genre") Genre genre);
     
+    Long countBySongAndGenre(@Param("song") Song song, @Param("genre") Genre genre);
+    
 }
