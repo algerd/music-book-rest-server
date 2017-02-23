@@ -15,4 +15,6 @@ public interface MusicicianGenreRepository extends PagingAndSortingRepository<Mu
     
     MusicianGenre findByMusicianAndGenre(@Param("musician") Musician musician, @Param("genre") Genre genre);
     
+    Long countByMusicianAndGenre(@Param("musician") Musician musician, @Param("genre") Genre genre);
+    
 }
