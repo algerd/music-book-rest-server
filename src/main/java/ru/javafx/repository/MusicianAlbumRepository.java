@@ -16,9 +16,5 @@ public interface MusicianAlbumRepository extends PagingAndSortingRepository<Musi
     Long countByMusicianAndAlbum(@Param("musician") Musician musician,  @Param("album") Album album);
     
     MusicianAlbum findByMusicianAndAlbum(@Param("musician") Musician musician,  @Param("album") Album album);
-    
-    MusicianAlbum findByMusician(@Param("musician") Musician musician);
-    
-    MusicianAlbum findByAlbum(@Param("album") Album album);
-    
+  
 }
