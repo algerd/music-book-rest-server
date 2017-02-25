@@ -16,9 +16,5 @@ public interface MusicianGroupRepository extends PagingAndSortingRepository<Musi
     Long countByMusicianAndArtist(@Param("musician") Musician musician,  @Param("artist") Artist artist);
     
     MusicianGroup findByMusicianAndArtist(@Param("musician") Musician musician,  @Param("artist") Artist artist);
-    
-    MusicianGroup findByMusician(@Param("musician") Musician musician);
-    
-    MusicianGroup findByArtist(@Param("artist") Artist artist);
-    
+
 }
