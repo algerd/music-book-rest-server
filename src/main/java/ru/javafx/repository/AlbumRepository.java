@@ -40,6 +40,7 @@ public interface AlbumRepository extends
         // Alias pathes:
         //bindings.bind(album.artist.name).all(new StringMultiValueBinding()); // "artist.name" - default
         bindings.bind(album.albumGenres.any().genre.id).as("genre.id").all(new NumberMultiValueBinding<>());
+        bindings.bind(album.musicianAlbums.any().musician.id).as("musician.id").all(new NumberMultiValueBinding<>());
     }
        
     @RestResource(path = "by_genre", rel = "by_genre")
