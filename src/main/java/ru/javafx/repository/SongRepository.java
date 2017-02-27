@@ -40,7 +40,7 @@ public interface SongRepository extends
         //bindings.bind(song.album.artist.name).as("artist.name").all(new StringMultiValueBinding());
         //bindings.bind(song.album.id).as("album.id").all(new NumberMultiValueBinding<>()); // "album.id" - default
         bindings.bind(song.songGenres.any().genre.id).as("genre.id").all(new NumberMultiValueBinding<>());
-        
+        bindings.bind(song.musicianSongs.any().musician.id).as("musician.id").all(new NumberMultiValueBinding<>());
     }
 
     @RestResource(path = "by_genre", rel = "by_genre")
