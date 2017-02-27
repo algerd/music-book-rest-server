@@ -15,4 +15,6 @@ public interface MusicianInstrumentRepository extends PagingAndSortingRepository
     
     MusicianInstrument findByMusicianAndInstrument(@Param("musician") Musician musician, @Param("instrument") Instrument instrument);
     
+    Long countByMusicianAndInstrument(@Param("musician") Musician musician, @Param("instrument") Instrument instrument);
+    
 }
