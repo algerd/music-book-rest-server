@@ -50,4 +50,5 @@ public interface AlbumRepository extends
     
     @RestResource(path = "by_artist", rel = "by_artist")
     List<Album> findByArtist(@Param("artist") Artist artist);
+    
 }
