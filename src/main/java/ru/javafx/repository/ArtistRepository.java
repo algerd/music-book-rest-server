@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.transaction.annotation.Transactional;
+import ru.javafx.Constants;
 import ru.javafx.entity.Artist;
 import ru.javafx.entity.Genre;
 import ru.javafx.entity.QArtist;
@@ -20,7 +21,7 @@ import ru.javafx.repository.operators.NumberMultiValueBinding;
 import ru.javafx.repository.operators.StringMultiValueBinding;
 
 @Transactional
-@RepositoryRestResource(collectionResourceRel = "artists", path = "artists")
+@RepositoryRestResource(collectionResourceRel = Constants.ARTIST_REPOSITORY, path = Constants.ARTIST_REPOSITORY)
 public interface ArtistRepository extends 
         PagingAndSortingRepository<Artist, Long>, 
         QueryDslPredicateExecutor<Artist>,
